@@ -1,4 +1,9 @@
-﻿  gf_test.cpp
-c:\users\gmanf\school\cst211\onedimarray\onedimarray\onedimarray.h(60): error C2995: 'OneDimArray<T>::OneDimArray(void)': function template has already been defined
-  c:\users\gmanf\school\cst211\onedimarray\onedimarray\onedimarray.h(30): note: see declaration of 'OneDimArray<T>::OneDimArray'
-c:\users\gmanf\school\cst211\onedimarray\onedimarray\gf_test.cpp(51): error C2264: 'OneDimArray<int>::OneDimArray': error in function definition or declaration; function not called
+﻿  Assignment1_test.cpp
+c:\users\gmanf\school\cst211\cst211\onedimarray\onedimarray\assignment1_test.cpp(70): warning C4101: 'tests_passed': unreferenced local variable
+c:\users\gmanf\school\cst211\cst211\onedimarray\onedimarray\assignment1_test.cpp(100): warning C4101: 'exception': unreferenced local variable
+c:\users\gmanf\school\cst211\cst211\onedimarray\onedimarray\assignment1_test.cpp(120): warning C4101: 'exception': unreferenced local variable
+c:\users\gmanf\school\cst211\cst211\onedimarray\onedimarray\assignment1_test.cpp(140): warning C4101: 'exception': unreferenced local variable
+c:\users\gmanf\school\cst211\cst211\onedimarray\onedimarray\assignment1_test.cpp(440): warning C4101: 'exception': unreferenced local variable
+c:\users\gmanf\school\cst211\cst211\onedimarray\onedimarray\assignment1_test.cpp(460): warning C4101: 'exception': unreferenced local variable
+c:\users\gmanf\school\cst211\cst211\onedimarray\onedimarray\assignment1_test.cpp(480): warning C4101: 'exception': unreferenced local variable
+  OneDimArray.vcxproj -> C:\Users\gmanf\School\CST211\CST211\OneDimArray\Debug\OneDimArray.exe

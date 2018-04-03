@@ -11,7 +11,7 @@ using std::cin;
 
 #include <crtdbg.h>
 #include <conio.h>
-#include "Array.h"
+#include "OneDimArray.h"
 #include "Exception.h"
 
 // Strings to test
@@ -51,7 +51,7 @@ bool test_set_start_index_with_data_complex();
 bool test_copy_ctor_complex();
 bool test_op_eql_complex();
 
-// Array of test functions
+// OneDimArray of test functions
 FunctionPointer test_functions[] = {test_neg_length, test_lower_bounds, test_upper_bounds, 
 									test_2_arg_ctor, test_1_arg_ctor, test_default_ctor,
 									test_set_pos_start_index, test_set_neg_start_index, 
@@ -70,7 +70,7 @@ int main()
 	bool tests_passed;
 
 	// Run the test functions
-	for each (FunctionPointer func in test_functions)
+	for (FunctionPointer func : test_functions)
 	{
 		if (func())
 		{
@@ -91,7 +91,7 @@ bool test_neg_length()
 	// Exception should be thrown for negative number
 	bool pass = false;
 
-	Array<int> val_len(20, 0);
+	OneDimArray<int> val_len(20, 0);
 
 	try
 	{
@@ -111,7 +111,7 @@ bool test_lower_bounds()
 {
 	bool pass = false;
 
-	Array<int> val_len(20, 0);
+	OneDimArray<int> val_len(20, 0);
 
 	try
 	{
@@ -131,7 +131,7 @@ bool test_upper_bounds()
 {
 	bool pass = false;
 
-	Array<int> val_len(20, 0);
+	OneDimArray<int> val_len(20, 0);
 
 	try
 	{
@@ -154,7 +154,7 @@ bool test_2_arg_ctor()
 	int start_index = 3;
 
 
-	Array<int> val_len(length, start_index);
+	OneDimArray<int> val_len(length, start_index);
 
 	if (val_len.GetLength() != length)
 		pass = false;
@@ -174,7 +174,7 @@ bool test_1_arg_ctor()
 	int default_start_index = 0;
 
 
-	Array<int> val_len(length);
+	OneDimArray<int> val_len(length);
 
 	if (val_len.GetLength() != length)
 		pass = false;
@@ -194,7 +194,7 @@ bool test_default_ctor()
 	int default_start_index = 0;
 
 
-	Array<int> val_len;
+	OneDimArray<int> val_len;
 
 	if (val_len.GetLength() != default_length)
 		pass = false;
@@ -213,7 +213,7 @@ bool test_set_pos_start_index()
 	int start_index = 6;
 
 
-	Array<int> val_len(10, 5);
+	OneDimArray<int> val_len(10, 5);
 
 	val_len.SetStartIndex(start_index);
 
@@ -231,7 +231,7 @@ bool test_set_neg_start_index()
 	int start_index = -6;
 
 
-	Array<int> val_len(10, 5);
+	OneDimArray<int> val_len(10, 5);
 
 	val_len.SetStartIndex(start_index);
 
@@ -251,7 +251,7 @@ bool test_adding_values()
 	int num_elements = 10;  // Change this if test data changes
 	int test_data[] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 0 };
 
-	Array<int> val_len(10);
+	OneDimArray<int> val_len(10);
 
 	for (int i = 0; i < num_elements; ++i)
 		val_len[i] = test_data[i];
@@ -278,7 +278,7 @@ bool test_larger_length_with_data()
 	int num_elements = 10;  // Change this if test data changes
 	int test_data[] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 0 };
 
-	Array<int> val_len(10);
+	OneDimArray<int> val_len(10);
 
 	for (int i = 0; i < num_elements; ++i)
 		val_len[i] = test_data[i];
@@ -317,7 +317,7 @@ bool test_smaller_length_with_data()
 	int num_elements = 10;  // Change this if test data changes
 	int test_data[] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 0 };
 
-	Array<int> val_len(10);
+	OneDimArray<int> val_len(10);
 
 	for (int i = 0; i < num_elements; ++i)
 		val_len[i] = test_data[i];
@@ -347,7 +347,7 @@ bool test_set_start_index_with_data()
 	int num_elements = 10;  // Change this if test data changes
 	int test_data[] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 0 };
 
-	Array<int> val_len(10);
+	OneDimArray<int> val_len(10);
 
 	for (int i = 0; i < num_elements; ++i)
 		val_len[i] = test_data[i];
@@ -375,12 +375,12 @@ bool test_copy_ctor()
 	int num_elements = 10;  // Change this if test data changes
 	int test_data[] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 0 };
 
-	Array<int> val_len(10);
+	OneDimArray<int> val_len(10);
 
 	for (int i = 0; i < num_elements; ++i)
 		val_len[i] = test_data[i];
 
-	Array<int> val_len_cpy(val_len);
+	OneDimArray<int> val_len_cpy(val_len);
 
 	// Check data integrity
 	for (int i = 0; i < num_elements && pass; ++i)
@@ -401,12 +401,12 @@ bool test_op_eql()
 	int num_elements = 10;  // Change this if test data changes
 	int test_data[] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 0 };
 
-	Array<int> val_len(10);
+	OneDimArray<int> val_len(10);
 
 	for (int i = 0; i < num_elements; ++i)
 		val_len[i] = test_data[i];
 
-	Array<int> val_len_cpy;
+	OneDimArray<int> val_len_cpy;
 
 	val_len_cpy = val_len;
 
@@ -431,7 +431,7 @@ bool test_neg_length_complex()
 	// Exception should be thrown for negative number
 	bool pass = false;
 
-	Array<string> val_len(20, 0);
+	OneDimArray<string> val_len(20, 0);
 
 	try
 	{
@@ -451,7 +451,7 @@ bool test_lower_bounds_complex()
 {
 	bool pass = false;
 
-	Array<string> val_len(20, 0);
+	OneDimArray<string> val_len(20, 0);
 
 	try
 	{
@@ -471,7 +471,7 @@ bool test_upper_bounds_complex()
 {
 	bool pass = false;
 
-	Array<string> val_len(20, 0);
+	OneDimArray<string> val_len(20, 0);
 
 	try
 	{
@@ -494,7 +494,7 @@ bool test_2_arg_ctor_complex()
 	int start_index = 3;
 
 
-	Array<string> val_len(length, start_index);
+	OneDimArray<string> val_len(length, start_index);
 
 	if (val_len.GetLength() != length)
 		pass = false;
@@ -514,7 +514,7 @@ bool test_1_arg_ctor_complex()
 	int default_start_index = 0;
 
 
-	Array<string> val_len(length);
+	OneDimArray<string> val_len(length);
 
 	if (val_len.GetLength() != length)
 		pass = false;
@@ -534,7 +534,7 @@ bool test_default_ctor_complex()
 	int default_start_index = 0;
 
 
-	Array<string> val_len;
+	OneDimArray<string> val_len;
 
 	if (val_len.GetLength() != default_length)
 		pass = false;
@@ -553,7 +553,7 @@ bool test_set_pos_start_index_complex()
 	int start_index = 6;
 
 
-	Array<string> val_len(10, 5);
+	OneDimArray<string> val_len(10, 5);
 
 	val_len.SetStartIndex(start_index);
 
@@ -571,7 +571,7 @@ bool test_set_neg_start_index_complex()
 	int start_index = -6;
 
 
-	Array<string> val_len(10, 5);
+	OneDimArray<string> val_len(10, 5);
 
 	val_len.SetStartIndex(start_index);
 
@@ -588,7 +588,7 @@ bool test_adding_values_complex()
 	bool pass = true;
 	string temp;
 
-	Array<string> val_len(15);
+	OneDimArray<string> val_len(15);
 
 	for (int i = 0; i < NUM_NAMES; ++i)
 		val_len[i] = NAMES[i];
@@ -613,7 +613,7 @@ bool test_larger_length_with_data_complex()
 
 	int new_length = 20;
 
-	Array<string> val_len(15);
+	OneDimArray<string> val_len(15);
 
 	for (int i = 0; i < NUM_NAMES; ++i)
 		val_len[i] = NAMES[i];
@@ -649,7 +649,7 @@ bool test_smaller_length_with_data_complex()
 	string temp;
 	int new_length = 8;
 
-	Array<string> val_len(15);
+	OneDimArray<string> val_len(15);
 
 	for (int i = 0; i < NUM_NAMES; ++i)
 		val_len[i] = NAMES[i];
@@ -676,7 +676,7 @@ bool test_set_start_index_with_data_complex()
 	string temp;
 	int new_start_index = 8;
 
-	Array<string> val_len(15);
+	OneDimArray<string> val_len(15);
 
 	for (int i = 0; i < NUM_NAMES; ++i)
 		val_len[i] = NAMES[i];
@@ -701,12 +701,12 @@ bool test_copy_ctor_complex()
 {
 	bool pass = true;
 
-	Array<string> val_len(15);
+	OneDimArray<string> val_len(15);
 
 	for (int i = 0; i < NUM_NAMES; ++i)
 		val_len[i] = NAMES[i];
 
-	Array<string> val_len_cpy(val_len);
+	OneDimArray<string> val_len_cpy(val_len);
 
 	// Check data integrity
 	for (int i = 0; i < NUM_NAMES && pass; ++i)
@@ -724,12 +724,12 @@ bool test_op_eql_complex()
 {
 	bool pass = true;
 
-	Array<string> val_len(15);
+	OneDimArray<string> val_len(15);
 
 	for (int i = 0; i < NUM_NAMES; ++i)
 		val_len[i] = NAMES[i];
 
-	Array<string> val_len_cpy;
+	OneDimArray<string> val_len_cpy;
 
 	val_len_cpy = val_len;
 

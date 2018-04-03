@@ -23,10 +23,10 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="gf_test.cpp">
+    <ClCompile Include="Exception.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Exception.cpp">
+    <ClCompile Include="Assignment1_test.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

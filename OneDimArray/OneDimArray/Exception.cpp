@@ -35,6 +35,22 @@ Exception::Exception(char * msg)
 }
 
 /****************
+Purpose: A copy ctor for exception
+Precondition: -
+Postcondition: Creates a new exception with the same msg as copy
+*****************/
+Exception::Exception(Exception & copy)
+{
+	m_msg = nullptr;
+	if (copy.m_msg) //if not nullptr
+	{
+		int length = strlen(copy.m_msg); //store the length of the msg that's getting copied
+		m_msg = new char[length + 1]; //make room for msg + null char
+		strcpy(m_msg, copy.m_msg);
+	}
+}
+
+/****************
 Purpose: A dtor for exception
 Precondition: -
 Postcondition: Frees memory for msg
@@ -92,4 +108,16 @@ void Exception::setMessage(char * msg)
 	}
 }
 
-
+/****************
+Purpose: An overloaded insertion operator for ostream
+Precondition: -
+Postcondition: Outputs char* to ostream if not null
+*****************/
+ostream & operator<<(ostream & os, const Exception & ex)
+{
+	if (ex.getMessage() != nullptr) 
+	{
+		os << ex.getMessage();
+	}
+	return os;
+}
