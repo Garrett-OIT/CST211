@@ -3,7 +3,7 @@ Author: Garrett Fechter
 Purpose: Header for a basic Exception class
 Date Created: 4/2/2018
 Modifications:
-
+			4/3/2018 - const methods
 *****************************/
 
 #include <iostream>
@@ -21,7 +21,7 @@ using std::ostream;
  Methods:
 	const char* getMessage() const
 		getter for m_msg
-	Exception(char* msg)
+	Exception(const char* msg)
 		ctor, takes null terminated msg at char* pointer
 	Exception(Exception & copy)
 		copy ctor
@@ -38,7 +38,7 @@ class Exception
 {
 	public:
 		Exception();//default ctor, empty message
-		Exception(char* msg);//ctor, takes null terminated msg at char* pointer
+		Exception(const char* msg);//ctor, takes null terminated msg at char* pointer
 		Exception(Exception & copy); //copy ctor
 		~Exception();//destructor to free m_msg memory
 		Exception & operator=(const Exception & rhs);//overloaded assignment operator

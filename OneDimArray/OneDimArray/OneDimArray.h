@@ -3,7 +3,7 @@ Author: Garrett Fechter
 Purpose: Header file for OneDimArray
 Date Created: 4/2/2018
 Modifications:
-
+			4/3/2018 - dtor, const methods
 *****************************/
 
 #include "Exception.h"
@@ -41,16 +41,16 @@ class OneDimArray
 		Returns the T specified by index
 ********************************************************/
 public:
-	OneDimArray<T>();//default ctor, m_array is nullptr, m_length = 0, m_start_index = 0
-	OneDimArray<T>(int length, int start_index = 0); //a convenient empty ctor
-	~OneDimArray<T>(); //dtor
-	OneDimArray(const OneDimArray & copy); //a copy ctor
-	OneDimArray<T> & operator=(const OneDimArray<T> & rhs); //assignment operator
-	T & operator[](int index);//overloaded [] operator
-	int GetStartIndex();//returns m_start_index by value
-	void SetStartIndex(int start_index);//setter for m_start_index
-	int GetLength();//returns m_length by value
-	void SetLength(int length);//sets m_length, deletes/initializes data
+	OneDimArray<T>();
+	OneDimArray<T>(int length, int start_index = 0);
+	~OneDimArray<T>(); 
+	OneDimArray(const OneDimArray & copy); 
+	OneDimArray<T> & operator=(const OneDimArray<T> & rhs); 
+	T & operator[](int index) const;
+	int GetStartIndex() const;
+	void SetStartIndex(int start_index);
+	int GetLength() const;
+	void SetLength(int length);
 private:
 	T* m_array;		//pointer to first element
 	int m_length;		//number of elements
@@ -80,8 +80,7 @@ OneDimArray<T>::OneDimArray(int length, int start_index) : m_array(nullptr), m_l
 {
 	if (length < 0) 
 	{
-		char err[] = "Length specified in ctor was negative";
-		throw new Exception(err);
+		throw Exception("Length specified in ctor was negative");
 	}
 	if (length == 0) 
 	{
@@ -107,7 +106,9 @@ template<typename T>
 OneDimArray<T>::~OneDimArray()
 {
 	delete[] m_array;
+	m_array = nullptr;
 	m_length = 0;
+	m_start_index = 0;
 }
 
 /********************************
@@ -167,26 +168,20 @@ Precondition: Takes an int index, which is element in relation to start_index
 Postcondition: Returns element T passed by reference
 ***********************************/
 template <typename T>
-T & OneDimArray<T>::operator[](int index)
+T & OneDimArray<T>::operator[](int index) const
 {
 	if (m_array == nullptr)
 	{
-		char err_msg[] = "[] operator used when no data present";//array is nullptr still
-		Exception error(err_msg);
-		throw error;
+		throw Exception("[] operator used when no data present");
 	}
 	if (index < m_start_index)
 	{
-		char err_msg[] = "Tried to access below bounds in [] operator"; //tried to access element before starting index
-		Exception error(err_msg);
-		throw error;
+		throw Exception("Tried to access below bounds in [] operator"); //tried to access element before starting index
 	}
 	int absolute_index = index - m_start_index; //gets the absolute index of wanted element
 	if (absolute_index > (m_length - 1))
 	{
-		char err_msg[] = "Tried to access beyond bounds in [] operator";//tried to return element beyond length
-		Exception error(err_msg);
-		throw error;
+		throw Exception("Tried to access beyond bounds in [] operator");//tried to return element beyond length
 	}
 	return m_array[absolute_index];
 }
@@ -198,7 +193,7 @@ T & OneDimArray<T>::operator[](int index)
  Postcondition: -
 ***********************************/
 template <typename T>
-int OneDimArray<T>::GetStartIndex() 
+int OneDimArray<T>::GetStartIndex() const
 {
 	return m_start_index;
 }
@@ -222,7 +217,7 @@ Precondition: -
 Postcondition: -
 ***********************************/
 template <typename T>
-int OneDimArray<T>::GetLength()
+int OneDimArray<T>::GetLength() const
 {
 	return m_length;
 }
@@ -239,36 +234,21 @@ inline void OneDimArray<T>::SetLength(int length)
 {
 	if (length < 0) 
 	{
-		char err[] = "Invalid length specified";
-		Exception error(err);
-		throw error;
+		throw Exception("Invalid length specified");
 	}
-	if (length < m_length) //length is shorter- losing some data
+	T* new_array = new T[length];
+	int shortest = (length < m_length) ? length : m_length; //gets the smaller
+	for (int i = 0; i < shortest; i++)
 	{
-		T* new_array = new T[length]; //allocate smaller space
-		for (int i = 0; i < length; i++) 
-		{
-			new_array[i] = m_array[i]; //copy entries
-		}
-		delete[] m_array;//get rid of old data
-		m_array = new_array;//save new data
-		m_length = length;//update length
+		new_array[i] = m_array[i];//copies over existing data
 	}
-	else if (length > m_length) //longer length
+	for (int i = shortest; i < length; i++)
 	{
-		T* new_array = new T[length];
-		for (int i = 0; i < m_length; i++) 
-		{
-			new_array[i] = m_array[i]; //copy 
-		}
-		for (int i = m_length; i < length; i++) 
-		{
-			new_array[i] = T(); //initialize new elements
-		}
-		delete[] m_array; //get rid of old data
-		m_array = new_array; //save new data
-		m_length = length; //update length
+		new_array[i] = T(); //if there is more before length, blank data
 	}
+	delete[] m_array;
+	m_array = new_array;
+	m_length = (length > m_length) ? length : m_length; //gets the bigger
 }
 
 #endif

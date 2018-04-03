@@ -20,7 +20,7 @@ Purpose: A convenient ctor for exception
 Precondition: msg MUST be null terminated, or be a nullptr
 Postcondition: Creates a new exception with a m_msg matching msg (deep copy)
 *****************/
-Exception::Exception(char * msg)
+Exception::Exception(const char * msg)
 {
 	if (msg != nullptr) //if it points to data
 	{
@@ -58,6 +58,7 @@ Postcondition: Frees memory for msg
 Exception::~Exception()
 {
 	delete[] m_msg;
+	m_msg = nullptr;
 }
 
 /****************
