@@ -1,3 +1,9 @@
+/******************
+ This test file was given by Todd Breedlove and modified for
+	OneDimArray, and also to check for memory leaks
+
+******************/
+
 #define _CRTDBG_MAP_ALLOC
 
 typedef bool(*FunctionPointer)();  // Define a function pointer type
@@ -12,7 +18,6 @@ using std::cin;
 #include <crtdbg.h>
 #include <conio.h>
 #include "OneDimArray.h"
-#include "Exception.h"
 
 // Strings to test
 const char* NAMES[] = { "Kyle", "Brit", "Seth", "Alex", "Josh", "Kian",
@@ -67,6 +72,7 @@ FunctionPointer test_functions[] = {test_neg_length, test_lower_bounds, test_upp
 
 int main()
 {
+	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
 	bool tests_passed;
 
 	// Run the test functions

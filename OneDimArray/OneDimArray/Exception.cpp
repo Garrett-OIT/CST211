@@ -39,7 +39,7 @@ Purpose: A copy ctor for exception
 Precondition: -
 Postcondition: Creates a new exception with the same msg as copy
 *****************/
-Exception::Exception(Exception & copy)
+Exception::Exception(const Exception & copy)
 {
 	m_msg = nullptr;
 	if (copy.m_msg) //if not nullptr

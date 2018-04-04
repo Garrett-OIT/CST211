@@ -39,7 +39,7 @@ class Exception
 	public:
 		Exception();//default ctor, empty message
 		Exception(const char* msg);//ctor, takes null terminated msg at char* pointer
-		Exception(Exception & copy); //copy ctor
+		Exception(const Exception & copy); //copy ctor
 		~Exception();//destructor to free m_msg memory
 		Exception & operator=(const Exception & rhs);//overloaded assignment operator
 		const char* getMessage() const;//getter for m_msg
