@@ -1,2 +1,3 @@
-﻿  Exception.cpp
-LINK : fatal error LNK1561: entry point must be defined
+﻿  test_assign2.cpp
+c:\users\gmanf\school\cst211\cst211\assign2\assign2\test_assign2.cpp(27): warning C4101: 'tests_passed': unreferenced local variable
+  assign2.vcxproj -> C:\Users\gmanf\School\CST211\CST211\assign2\Debug\assign2.exe

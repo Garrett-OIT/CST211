@@ -44,7 +44,7 @@ public:
 	Array1D<T>();
 	Array1D<T>(int length, int start_index = 0);
 	~Array1D<T>(); 
-	Array1D(const Array1D & copy); 
+	Array1D<T>(const Array1D & copy); 
 	Array1D<T> & operator=(const Array1D<T> & rhs); 
 	T & operator[](int index) const;
 	int GetStartIndex() const;
@@ -179,7 +179,7 @@ T & Array1D<T>::operator[](int index) const
 		throw Exception("Tried to access below bounds in [] operator"); //tried to access element before starting index
 	}
 	int absolute_index = index - m_start_index; //gets the absolute index of wanted element
-	if (absolute_index > (m_length - 1))
+	if (absolute_index > m_length)
 	{
 		throw Exception("Tried to access beyond bounds in [] operator");//tried to return element beyond length
 	}
