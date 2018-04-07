@@ -1,7 +1,5 @@
 #include "Array1D.h"
-
-template<typename T>
-class Row;
+#include "Row.h"
 
 #ifndef ARRAY2D
 #define ARRAY2D
@@ -16,11 +14,13 @@ public:
 	~Array2D();
 	Array2D<T> & operator=(const Array2D<T> & rhs);
 	Row<T> operator[](int index);
+	const Row<T> operator[](int index) const;
 	int getRow() const;
 	void setRow(int rows);
 	int getColumn() const;
 	void setColumn(int columns);
-	T & Select(int row, int column) const;
+	T & Select(int row, int column);
+	const T & Select(int row, int column) const;
 private:
 	Array1D<T> m_array; //array of 1D arrays
 	int m_row; //number of rows
@@ -69,6 +69,12 @@ inline Row<T> Array2D<T>::operator[](int index)
 }
 
 template<typename T>
+inline const Row<T> Array2D<T>::operator[](int index) const
+{
+	return Row<T>(*this, index);
+}
+
+template<typename T>
 inline int Array2D<T>::getRow() const
 {
 	return m_row;
@@ -79,8 +85,8 @@ inline void Array2D<T>::setRow(int rows)
 {
 	if (rows < 0)
 		throw Exception("Tried to set rows negative");
-	int shorter = (rows > m_row) ? m_row : rows;
-	m_array.SetLength(shorter * m_col);
+	m_array.SetLength(rows * m_col);
+	m_row = rows;
 }
 
 template<typename T>
@@ -100,17 +106,20 @@ inline void Array2D<T>::setColumn(int columns)
 	{
 		for (int j = 0; j < shorter; j++) //for each column
 		{
-			newArray[(i * shorter) + j] = m_array[(i * shorter) + j];
+			newArray[(i * columns) + j] = m_array[(i * m_col) + j];
 		}
 		for (int j = shorter; j < columns; j++) //empty spaces if longer
 		{
-			newArray[(i * shorter) + j] = T();
+			newArray[(i * columns) + j] = T();
 		}
 	}
+	m_array.~Array1D();
+	m_array = newArray;
+	m_col = columns;
 }
 
 template<typename T>
-inline T & Array2D<T>::Select(int row, int column) const
+inline T & Array2D<T>::Select(int row, int column)
 {
 	if (row >= m_row || column >= m_col)
 	{
@@ -123,41 +132,18 @@ inline T & Array2D<T>::Select(int row, int column) const
 	return m_array[(m_col*row) + column];
 }
 
-
-#ifndef ROW
-#define ROW
-
 template<typename T>
-class Row
+inline const T & Array2D<T>::Select(int row, int column) const
 {
-public:
-	Row(Array2D<T> & in_array, int row);
-	T & operator[](int column) const;
-private:
-	Array2D<T> & m_array2D; //the Array2D this row is part of
-	int m_row; //the number row this is inside Array2D
-};
-
-template<typename T>
-inline Row<T>::Row(Array2D<T> & in_array, int row) : m_array2D(in_array), m_row(row)
-{
-	if (row < 0)
+	if (row >= m_row || column >= m_col)
 	{
-		throw Exception("Rows specified can't be negative");
+		throw Exception("Out of bounds, beyond");
 	}
-	if (row > in_array.getRow()) 
+	if (row < 0 || column < 0)
 	{
-		throw Exception("Out of bounds");
+		throw Exception("Out of bounds, tried to access <0");
 	}
+	return m_array[(m_col*row) + column];
 }
 
-template<typename T>
-inline T & Row<T>::operator[](int column) const
-{
-	if (column >= m_array2D.getColumn())
-		throw Exception("Out of bounds");
-	return m_array2D.Select(m_row, column);
-}
-
-#endif
 #endif

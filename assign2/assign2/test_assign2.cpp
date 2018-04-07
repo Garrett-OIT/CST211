@@ -14,8 +14,10 @@ using std::cin;
 bool test_a2dc();
 bool test_a2dc2();
 bool test_a2dcc();
+bool test_a2dconstDeref();
+bool test_a2dsetters();
 
-FunctionPointer test_functions[] = { test_a2dc , test_a2dc2, test_a2dcc };
+FunctionPointer test_functions[] = { test_a2dc , test_a2dc2, test_a2dcc, test_a2dconstDeref, test_a2dsetters };
 
 string names1[] = { "Bob", "Joe", "Lorem" };
 string names2[] = { "Ipsum", "Babbidty", "whoboo" };
@@ -153,7 +155,7 @@ bool test_a2dcc()
 		moreStrings[1][2] != names2[2] ||
 		moreStrings[2][0] != names3[0] ||
 		moreStrings[2][1] != names3[1] ||
-		moreStrings[2][2] != names3[2])
+		moreStrings.Select(2, 2) != names3[2])
 		pass = false;
 	try
 	{
@@ -163,5 +165,144 @@ bool test_a2dcc()
 	{
 		cout << "Expected error 2 from test_a2dcc: " << e << "\n";
 	}
+	return pass;
+}
+
+bool test_a2dconstDeref()
+{
+	bool pass = true;
+	Array2D<int> ints(3, 3);
+	ints[0][0] = 00;
+	ints[0][1] = 01;
+	ints[0][2] = 02;
+	ints[1][0] = 10;
+	ints[1][1] = 11;
+	ints[1][2] = 12;
+	ints[2][0] = 20;
+	ints[2][1] = 21;
+	ints[2][2] = 22;
+	const Array2D<int> constInts(ints);
+	if (constInts[0][0] != 00 ||
+		constInts[0][1] != 01 ||
+		constInts[0][2] != 02 ||
+		constInts[1][0] != 10 ||
+		constInts[1][1] != 11 ||
+		constInts[1][2] != 12 ||
+		constInts[2][0] != 20 ||
+		constInts[2][1] != 21 ||
+		constInts[2][2] != 22)
+		pass = false;
+
+	Array2D<string> strings(3, 3);
+	strings[0][0] = names1[0];
+	strings[0][1] = names1[1];
+	strings[0][2] = names1[2];
+	strings[1][0] = names2[0];
+	strings[1][1] = names2[1];
+	strings[1][2] = names2[2];
+	strings[2][0] = names3[0];
+	strings[2][1] = names3[1];
+	strings[2][2] = names3[2];
+	const Array2D<string> constStrs(strings);
+	if (constStrs[0][0] != names1[0] ||
+		constStrs[0][1] != names1[1] ||
+		constStrs[0][2] != names1[2] ||
+		constStrs[1][0] != names2[0] ||
+		constStrs[1][1] != names2[1] ||
+		constStrs[1][2] != names2[2] ||
+		constStrs[2][0] != names3[0] ||
+		constStrs[2][1] != names3[1] ||
+		constStrs.Select(2, 2) != names3[2])
+		pass = false;
+	return pass;
+}
+
+bool test_a2dsetters()
+{
+	bool pass = true;
+	Array2D<int> ints(3, 3);
+	ints[0][0] = 888;
+	ints[0][1] = 01;
+	ints[0][2] = 02;
+	ints[1][0] = 10;
+	ints[1][1] = 11;
+	ints[1][2] = 12;
+	ints[2][0] = 20;
+	ints[2][1] = 21;
+	ints[2][2] = 99999;
+
+	ints.setColumn(10);
+	ints.setRow(10);
+
+	if (ints.getColumn() != 10 || ints.getRow() != 10)
+		pass = false;
+	if (ints.Select(0, 0) != 888)
+		pass = false;
+	if (ints.Select(9, 9) != 0)
+		pass = false;
+	if (ints[2][2] != 99999) //failing
+		pass = false;
+	if (ints.Select(2, 2) != 99999) //failing
+		pass = false;
+	try
+	{
+		ints.setColumn(-2);
+	}
+	catch (Exception &e)
+	{
+		cout << "Expected error in setters: " << e << "\n";
+	}
+	try
+	{
+		ints.setRow(-2);
+	}
+	catch (Exception &e)
+	{
+		cout << "Expected error in setters: " << e << "\n";
+	}
+	ints.setColumn(1);
+	if (ints.Select(0, 0) != 888)
+		pass = false;
+	int test = ints.Select(2, 0);
+	if (ints.Select(2, 0) != 20)
+		pass = false;
+
+	Array2D<string> strings(3, 3);
+	strings[0][0] = names1[0];
+	strings[0][1] = names1[1];
+	strings[0][2] = names1[2];
+	strings[1][0] = names2[0];
+	strings[1][1] = names2[1];
+	strings[1][2] = names2[2];
+	strings[2][0] = names3[0];
+	strings[2][1] = names3[1];
+	strings[2][2] = names3[2];
+
+	strings.setColumn(22);
+	strings.setRow(22);
+
+	if (strings.getColumn() != 22 || strings.getRow() != 22)
+		pass = false;
+	if (strings.Select(0, 0) != names1[0] || strings.Select(21, 21) != string() || strings.Select(2, 2) != names3[2])
+		pass = false;
+	try
+	{
+		strings.setColumn(-2);
+	}
+	catch (Exception &e)
+	{
+		cout << "Expected error in setters: " << e << "\n";
+	}
+	try
+	{
+		strings.setRow(-2);
+	}
+	catch (Exception &e)
+	{
+		cout << "Expected error in setters: " << e << "\n";
+	}
+	strings.setColumn(1);
+	if (strings.Select(0, 0) != names1[0] || strings.Select(2, 0) != names3[0])
+		pass = false;
 	return pass;
 }
