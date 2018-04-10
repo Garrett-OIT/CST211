@@ -5,6 +5,7 @@ Date Created: 4/6/2018
 Modifications:
 		4/9/2018 Ensured any exceptions from Row were caught
 				 Documented
+		4/10/2018 Minor linting
 *****************************/
 
 #include "Array1D.h"
@@ -81,12 +82,12 @@ inline Array2D<T>::Array2D() : m_array(), m_row(0), m_col(0)
 Method: Array2D(int row, int col)
 Purpose: A constructor for Array2D that specifies rows and cols
 Precondition: -
-Postcondition: Creates an instance of Array2D with m_array of the size specified
-by row and col, m_row = row, m_col = col. Throws exception if try to specify negative
-col or row
+Postcondition: Creates an instance of Array2D with m_array of the size 
+specified by row and col, m_row = row, m_col = col. Throws exception if
+try to specify negative col or row
 *******************************/
 template<typename T>
-inline Array2D<T>::Array2D(int row, int col) : m_array(row*col), m_row(row), m_col(col)
+inline Array2D<T>::Array2D(int row, int col) : m_array(row * col), m_row(row), m_col(col)
 {
 	if (row < 0 || col < 0)
 		throw Exception("Tried to set negative row or col");
@@ -113,7 +114,6 @@ resets other data members to 0
 template<typename T>
 inline Array2D<T>::~Array2D()
 {
-	m_array.~Array1D();
 	m_row = 0;
 	m_col = 0;
 }
@@ -234,7 +234,6 @@ inline void Array2D<T>::SetColumn(int columns)
 			newArray[(i * columns) + j] = T();
 		}
 	}
-	m_array.~Array1D();
 	m_array = newArray;
 	m_col = columns;
 }
@@ -257,7 +256,7 @@ inline T & Array2D<T>::Select(int row, int column)
 	{
 		throw Exception("Out of bounds, tried to access <0");
 	}
-	return m_array[(m_col*row) + column];
+	return m_array[(m_col * row) + column];
 }
 
 /******************************
@@ -278,7 +277,7 @@ inline const T & Array2D<T>::Select(int row, int column) const
 	{
 		throw Exception("Out of bounds, tried to access <0");
 	}
-	return m_array[(m_col*row) + column];
+	return m_array[(m_col * row) + column];
 }
 
 #endif

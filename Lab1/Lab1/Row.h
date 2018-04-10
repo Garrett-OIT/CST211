@@ -80,8 +80,8 @@ inline Row<T>::Row(const Array2D<T> & in_array, int row) : m_array2D(in_array), 
 
 /******************************
 Method: operator[](int column)
-Purpose: Subscript operator that calls Array2D's Select method to get T& at column in this row
-		specified
+Purpose: Subscript operator that calls Array2D's Select method to get T& at 
+column in this row specified
 Precondition: Takes inbounds and non-negative column
 Postcondition: Returns T& to T specified by this row and column
 *******************************/
@@ -92,13 +92,14 @@ inline T & Row<T>::operator[](int column)
 		throw Exception("Out of bounds");
 	if (column < 0)
 		throw Exception("Out of bounds");
-	return const_cast <T &>(m_array2D.Select(m_row, column));
+	//return const_cast <T &>(m_array2D.Select(m_row, column));
+	return m_array2D.Select(m_row, column);
 }
 
 /******************************
 Method: const operator[](int column)
-Purpose: Subscript operator that calls Array2D's const Select method to get const T& at column in this row
-specified
+Purpose: Subscript operator that calls Array2D's const Select method to get 
+const T& at column in this row specified
 Precondition: Takes inbounds and non-negative column
 Postcondition: Returns const T& to T specified by this row and column
 *******************************/
