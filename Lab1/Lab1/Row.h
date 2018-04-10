@@ -92,8 +92,7 @@ inline T & Row<T>::operator[](int column)
 		throw Exception("Out of bounds");
 	if (column < 0)
 		throw Exception("Out of bounds");
-	//return const_cast <T &>(m_array2D.Select(m_row, column));
-	return m_array2D.Select(m_row, column);
+	return const_cast <T &>(m_array2D.Select(m_row, column));
 }
 
 /******************************
