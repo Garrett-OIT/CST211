@@ -120,10 +120,12 @@
     <ClInclude Include="Array2D.h" />
     <ClInclude Include="Exception.h" />
     <ClInclude Include="Row.h" />
+    <ClInclude Include="Tile.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Exception.cpp" />
     <ClCompile Include="test_assign2.cpp" />
+    <ClCompile Include="Tile.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
