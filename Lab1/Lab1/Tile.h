@@ -13,7 +13,28 @@
  Purpose: A Tile that will be used in making the
 	game Alchemy (PopCap)
  Manager Functions:
+	Tile();
+		A default ctor. Initializes color to 0x0F (black on white)
+		and shape to ' '
+	Tile(int color, char shape);
+		Ctor that initializes m_color to masked (0xFF) color input and
+		m_shape to shape
+	Tile(const Tile & copy);
+		Copy ctor
+	Tile & operator=(const Tile & rhs);
+		Overloaded assigment operator
+	~Tile();
+		Simple dtor (no memory). Resets m_color to 0x0F (black on white
+		and m_shape to ' '
  Methods:
+	char GetShape() const;
+		A getter for m_shape
+	void SetShape(char shape);
+		 A setter for m_shape
+	int GetColor() const;
+		A getter for m_color
+	void SetColor(int color);
+		A setter for m_color
 ************************************/
 class Tile 
 {

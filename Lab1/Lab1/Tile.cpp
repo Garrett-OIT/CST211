@@ -11,10 +11,10 @@
 Method: Tile
 Purpose: Default ctor for Tile
 Precondition: -
-Postcondition: Creates instance of Tile with 0x0F (black on white) 
+Postcondition: Creates instance of Tile with 0x80 (black on gray)
 	and space shape
 *******************************/
-Tile::Tile() : m_color(0x0F), m_shape(' ')
+Tile::Tile() : m_color(0x80), m_shape(' ')
 { }
 
 /******************************
@@ -57,7 +57,7 @@ Postcondition: Resets all values
 *******************************/
 Tile::~Tile()
 {
-	m_color = 0xF0; //black text on white background
+	m_color = 0x80;
 	m_shape = ' ';
 }
 
