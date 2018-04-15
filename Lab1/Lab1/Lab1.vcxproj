@@ -116,6 +116,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Alchemy.h" />
     <ClInclude Include="Array1D.h" />
     <ClInclude Include="Array2D.h" />
     <ClInclude Include="Exception.h" />
@@ -124,6 +125,7 @@
     <ClInclude Include="Tile.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Alchemy.cpp" />
     <ClCompile Include="Exception.cpp" />
     <ClCompile Include="Grid.cpp" />
     <ClCompile Include="test_assign2.cpp" />

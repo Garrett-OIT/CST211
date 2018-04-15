@@ -129,7 +129,7 @@ reference to new Array2D (or original object if self assinment attempted)
 template<typename T>
 inline Array2D<T> & Array2D<T>::operator=(const Array2D<T> & rhs)
 {
-	if (this != *rhs) //check for self assignment
+	if (this != &rhs) //check for self assignment
 	{
 		m_array = rhs.m_array; //should delete m_array
 		m_row = rhs.m_row;
@@ -252,6 +252,7 @@ inline T & Array2D<T>::Select(int row, int column)
 	{
 		throw Exception("Out of bounds, beyond");
 	}
+
 	if (row < 0 || column < 0)
 	{
 		throw Exception("Out of bounds, tried to access <0");

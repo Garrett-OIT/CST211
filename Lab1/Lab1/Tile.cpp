@@ -2,11 +2,14 @@
  Author: Garrett Fechter
  Purpose: An implementation file for Tile
  Date Created:	4/11/2018
- Modifications:
+ Modifications: 4/14/2018 Added Display
 ******************************/
-
+#include <windows.h>
+#include <iostream>
 #include "Tile.h"
-
+#define BACKGROUND_GOLD 0x60
+#define FOREGROUND_WHITE 0x0F
+#define BACKGROUND_BLACK 0x00
 /******************************
 Method: Tile
 Purpose: Default ctor for Tile
@@ -103,4 +106,19 @@ Postcondition: Changes m_color, masking to just the text color & bg bits
 void Tile::SetColor(int color)
 {
 	m_color = color & 0xFF; //mask for last 8 bits
+}
+
+/******************************
+Method: Display
+Purpose: Outputs shape using cout with correct colors
+Precondition: -
+Postcondition: Outputs a character using cout
+*******************************/
+void Tile::Display()
+{
+	HANDLE hStdout = 0;
+	hStdout = GetStdHandle(STD_OUTPUT_HANDLE);
+	SetConsoleTextAttribute(hStdout, m_color & 0xFF);
+	std::cout << m_shape;
+	SetConsoleTextAttribute(hStdout, FOREGROUND_WHITE | BACKGROUND_BLACK);
 }

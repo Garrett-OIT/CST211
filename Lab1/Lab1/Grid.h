@@ -29,15 +29,18 @@ public:
 	~Grid();
 	Array2D<Tile> & GetGrid();
 	void SetGrid(const Array2D<Tile> & newGrid);
-	bool CheckAdjacent(int row, int col) const;
+	bool CheckAdjacent(int row, int col, Tile & tile) const;
 	bool CheckRowComplete(int row) const;
 	bool CheckColComplete(int col) const;
-	//int CheckScore() const;
-	Tile & GenerateTile() const;
+	bool CheckBoardComplete() const;
+	Tile GenerateTile() const;
 	int InsertTile(int row, int col, Tile & tile);//returns # of sides new block touches
 	void ClearRow(int row);
 	void ClearCol(int col);
 	void ClearTile(int row, int col);
+	void Display();
+	int GetLevel() const;
+	void SetLevel(int level);
 private:
 	Array2D<Tile> m_grid;
 	int m_level; //the amount of colors/symbols beyond 5

@@ -35,6 +35,8 @@
 		A getter for m_color
 	void SetColor(int color);
 		A setter for m_color
+	void Display()
+		Outputs the shape using cout and the correct color
 ************************************/
 class Tile 
 {
@@ -48,6 +50,7 @@ public:
 	void SetShape(char shape);
 	int GetColor() const;
 	void SetColor(int color);
+	void Display();
 
 private:
 	int m_color; //the color of this tile

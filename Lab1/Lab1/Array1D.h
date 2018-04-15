@@ -248,7 +248,7 @@ inline void Array1D<T>::SetLength(int length)
 	}
 	delete[] m_array;
 	m_array = new_array;
-	m_length = (length > m_length) ? length : m_length; //gets the bigger
+	m_length = length; //gets the bigger
 }
 
 #endif
