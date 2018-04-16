@@ -8,21 +8,46 @@
 #define FOREGROUND_WHITE 0x0F
 #define BACKGROUND_BLACK 0x00
 
+/******************************
+Method: Grid
+Purpose: Default ctor
+Precondition: -
+Postcondition: Creates new Grid. Empty m_grid. m_level = 0. Seeds rand
+*******************************/
 Grid::Grid() : m_grid(), m_level(0)
 {
 	srand(time(NULL));
 }
 
+/******************************
+Method: Grid(const Grid & copy)
+Purpose: Copy ctor. 
+Precondition: Takes existing Grid. 
+Postcondition: Creates new Grid with same properties as copy. Seeds rand
+*******************************/
 Grid::Grid(const Grid & copy) : m_grid(copy.m_grid), m_level(copy.m_level)
 { 
 	srand(time(NULL));
 }
 
+/******************************
+Method: Grid(int length, int width) 
+Purpose: Ctor that takes length and width
+Precondition: Takes 0 or positive length and width (Array2D will throw exception)
+Postcondition: Returns new Grid with level 0 and specified dimensions. Seeds rand
+*******************************/
 Grid::Grid(int length, int width) : m_grid(length, width), m_level(0)
 { 
 	srand(time(NULL));
 }
 
+/******************************
+Method: Grid(int length, int width, int level)
+Purpose: Ctor that specifies dimensions and level
+Precondition: Takes 0 or positive length and width (Array2D will throw exception)
+	-2 <= level <- 2
+Postcondition: Returns new Grid with specified dimensions & level. Seeds rand
+*******************************/
 Grid::Grid(int length, int width, int level) : m_grid(length, width), m_level(level)
 { 
 	if (level < -2 || level > 2)
@@ -30,6 +55,13 @@ Grid::Grid(int length, int width, int level) : m_grid(length, width), m_level(le
 	srand(time(NULL));
 }
 
+/******************************
+Method:Grid & Grid::operator=(const Grid & rhs)
+Purpose: Assigment operator for Grid
+Precondition: Takes an existing Grid
+Postcondition: Changes Grid to have same properties as right hand side
+	Returns this Grid by reference
+*******************************/
 Grid & Grid::operator=(const Grid & rhs)
 {
 	m_grid = rhs.m_grid;
@@ -37,31 +69,52 @@ Grid & Grid::operator=(const Grid & rhs)
 	return *this;
 }
 
+/******************************
+Method: ~Grid()
+Purpose: Dtor for Grid
+Precondition: -
+Postcondition: Resets level to 0. m_grid is deallocated
+*******************************/
 Grid::~Grid()
 {
 	m_level = 0;
 }
 
+/******************************
+Method: Array2D<Tile>& Grid::GetGrid()
+Purpose: Getter for m_grid
+Precondition: - 
+Postcondition: Returns m_grid by reference
+*******************************/
 Array2D<Tile>& Grid::GetGrid()
 {
 	return m_grid;
 }
 
+/******************************
+Method: SetGrid(const Array2D<Tile>& newGrid)
+Purpose: Setter for m_grid
+Precondition: Takes existing grid by reference
+Postcondition: sets m_grid to a copy of newgrid
+*******************************/
 void Grid::SetGrid(const Array2D<Tile>& newGrid)
 {
 	m_grid = newGrid;
 }
 
+/******************************
+Method: bool CheckAdjacent(introw, int col, Tile & tile) const
+Purpose: Returns whether or not its valid to placed tile at location
+	in m_grid specified by row col
+Precondition: row and col must be in bounds or will throw exception
+Postcondition: returns true if it can be placed, else false
+*******************************/
 bool Grid::CheckAdjacent(int row, int col, Tile & tile) const
 {
 	bool okToPlace = true;
 	bool hasNeighbor = false;
-	//char shape;
-	//int color;
 	char compareShape;
 	int compareColor;
-	//shape = m_grid[row][col].GetShape(); //these will throw exceptions if
-	//color = m_grid[row][col].GetColor(); //row or col are invalid
 	if (m_grid[row][col].GetShape() != ' ')
 		throw Exception("Tried to place over existing shape!");
 	try
@@ -131,6 +184,12 @@ bool Grid::CheckAdjacent(int row, int col, Tile & tile) const
 	return okToPlace;
 }
 
+/******************************
+Method:bool Grid::CheckRowComplete(int row) const
+Purpose: Check whether or not a row is complete (non empty tiles in all positions)
+Precondition: Takes in-bounds row, the row to check for completeness
+Postcondition: Returns true if row is complete
+*******************************/
 bool Grid::CheckRowComplete(int row) const
 {
 	int complete = true;
@@ -142,6 +201,12 @@ bool Grid::CheckRowComplete(int row) const
 	return complete;
 }
 
+/******************************
+Method:bool Grid::CheckColComplete(int row) const
+Purpose: Check whether or not a col is complete (non empty tiles in all positions)
+Precondition: Takes in-bounds col, the col to check for completeness
+Postcondition: Returns true if col is complete
+*******************************/
 bool Grid::CheckColComplete(int col) const
 {
 	bool complete = true;
@@ -153,6 +218,13 @@ bool Grid::CheckColComplete(int col) const
 	return complete;
 }
 
+/******************************
+Method: bool Grid::CheckBoardComplete() const
+Purpose: Check whether or not the board is complete, that is all tiles have a 
+	gold background and the game has been won
+Precondition: -
+Postcondition: returns true if the board is ocmplete, else false
+*******************************/
 bool Grid::CheckBoardComplete() const
 {
 	bool complete = true;
@@ -167,6 +239,13 @@ bool Grid::CheckBoardComplete() const
 	return complete;
 }
 
+/******************************
+Method: Tile Grid::GenerateTile() const
+Purpose: Generates a random tile from A-F with +range of level and same color range
+		and also # and X (skull and crossbones)
+Precondition: -
+Postcondition: returns a new tile within constraints
+*******************************/
 Tile Grid::GenerateTile() const
 {
 	int shapeChoices = 5 + m_level + 2; //symbols, plus wild card and X
@@ -192,6 +271,13 @@ Tile Grid::GenerateTile() const
 	return Tile(newTileColor, newTileShape); 
 }
 
+/******************************
+Method: int Grid::InsertTile(int row, int col, Tile & tile)
+Purpose: Inserts tile at location specified, return how many sides that tile
+	borders if insertion successful. CheckAdjacent must return true
+Precondition: takes in-bounds row and col
+Postcondition: returns the number of sides tile borders. Tile inserted
+*******************************/
 int Grid::InsertTile(int row, int col, Tile & tile)
 {
 	char shape = '_';//used to check if adjacent tiles are empty
@@ -258,6 +344,13 @@ int Grid::InsertTile(int row, int col, Tile & tile)
 	return sides;
 }
 
+/******************************
+Method: void Grid::ClearRow(int row)
+Purpose: clears row specified with empty tiles with gold background,
+	if checkrow returns true
+Precondition: Takes in-bounds row
+Postcondition: Clears a row. 
+*******************************/
 void Grid::ClearRow(int row)
 {
 	if (!CheckRowComplete(row)) 
@@ -270,6 +363,13 @@ void Grid::ClearRow(int row)
 	}
 }
 
+/******************************
+Method: void Grid::ClearCol(int col)
+Purpose: clears col specified with empty tiles with gold background,
+	if checkcol returns true
+Precondition: Takes in-bounds col
+Postcondition: Clears a col. 
+*******************************/
 void Grid::ClearCol(int col)
 {
 	if (!CheckColComplete(col))
@@ -282,12 +382,12 @@ void Grid::ClearCol(int col)
 	}
 }
 
-void Grid::ClearTile(int row, int col)
-{
-	Tile gold_space(BACKGROUND_GOLD, ' ');
-	InsertTile(row, col, gold_space);
-}
-
+/******************************
+Method: void Grid::Display()
+Purpose: Iterates through m_grid and displays each tile
+Precondition: - 
+Postcondition: Outputs to console
+*******************************/
 void Grid::Display()
 {
 	HANDLE hStdout = 0;
@@ -324,12 +424,27 @@ void Grid::Display()
 	SetConsoleCursorPosition(hStdout, cursor);
 }
 
+/******************************
+Method: int Grid::GetLevel() const
+Purpose: Getter for m_level
+Precondition: -
+Postcondition: returns m_level
+*******************************/
 int Grid::GetLevel() const
 {
 	return m_level;
 }
 
+/******************************
+Method: void Grid::SetLevel(int level)
+Purpose: setter for m_level
+Precondition: -
+Postcondition: Sets m_level to level. -2 <= level <- 2, otherwise 
+	will throw an exception
+*******************************/
 void Grid::SetLevel(int level)
 {
+	if (level < -2 || level > 2)
+		throw Exception("Level specified is out of bounds");
 	m_level = level;
 }

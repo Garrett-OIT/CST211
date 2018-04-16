@@ -1,3 +1,6 @@
+//Author: Garrett Fechter
+//Purpose: Test alchemy, grid, and tile 
+
 #include "Alchemy.h"
 typedef bool(*FunctionPointer)();  // Define a function pointer type
 

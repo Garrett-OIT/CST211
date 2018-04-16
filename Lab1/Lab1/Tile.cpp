@@ -3,6 +3,7 @@
  Purpose: An implementation file for Tile
  Date Created:	4/11/2018
  Modifications: 4/14/2018 Added Display
+				4/15/2018 Edited Display to reset console color
 ******************************/
 #include <windows.h>
 #include <iostream>
