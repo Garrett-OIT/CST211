@@ -1,3 +1,10 @@
+/***************************
+ Author: Garrett Fechter
+ Purpose: An implementation file for Grid
+ Date Created:	4/14/2018
+ Modifications:	4/16/2018 Documented
+*****************************/
+
 #include <windows.h>
 #include <iostream>
 #include "Grid.h"

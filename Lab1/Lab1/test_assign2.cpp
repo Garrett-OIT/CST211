@@ -252,8 +252,16 @@ bool testGrid3_clearing()
 bool play()
 {
 	bool pass = true;
+	Grid six(6, 6);
+	Alchemy harder_game;
+	harder_game.SetBoard(six);
+	harder_game.Start(0);
 	Alchemy game;
-	if (game.Start(0))
+	if (game.Start(0)) 
+	{
+		cout << "Congrats on winning level 1!\nProceeding to level 2...\n";
 		game.Start(1);
+	}
+
 	return pass;
 }

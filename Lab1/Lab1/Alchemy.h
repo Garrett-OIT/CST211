@@ -11,6 +11,7 @@ public:
 	bool Start(int level);
 	const Grid  & GetBoard() const;
 	void SetBoard(Grid & board);
+	const int GetScore() const;
 	void DisplayScore();
 	~Alchemy();
 

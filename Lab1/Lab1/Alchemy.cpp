@@ -1,3 +1,7 @@
+/***************************
+ Author: Garrett Fechter
+
+****************************/
 #include <iostream>
 #include "Alchemy.h"
 #include <windows.h>
@@ -29,6 +33,10 @@ Alchemy & Alchemy::operator=(const Alchemy & rhs)
 
 bool Alchemy::Start(int level)
 {
+	int length = m_board.GetGrid().GetRow();
+	m_board.GetGrid().SetRow(0); //clear grid
+	m_board.GetGrid().SetRow(length); //reset grid size
+	m_score = 0; //reset score
 	bool winnerWinner = false;
 	cout << "Hello and welcome to a version of Alchemy!\n";
 	cout << "If you don't know how to play, look it up online.\n";
@@ -98,7 +106,7 @@ bool Alchemy::Start(int level)
 	m_board.Display();
 	if (m_board.CheckBoardComplete()) 
 	{
-		cout << "Congratulations, you won!!!\nYour score was " << m_score;
+		cout << "Congratulations, you won!!!\nYour score was " << m_score << "\n";
 		winnerWinner = true;
 	}
 
@@ -111,7 +119,7 @@ bool Alchemy::Start(int level)
 			cout << " ";
 		}
 		cout << "\n";
-		cout << "You lost. Better luck next time.";
+		cout << "You lost. Better luck next time.\n";
 	}
 	return winnerWinner;
 }
@@ -124,6 +132,11 @@ const Grid & Alchemy::GetBoard() const
 void Alchemy::SetBoard(Grid & board)
 {
 	m_board = board;
+}
+
+const int Alchemy::GetScore() const
+{
+	return m_score;
 }
 
 void Alchemy::DisplayScore() 

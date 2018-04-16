@@ -2,7 +2,7 @@
  Author: Garrett Fechter
  Purpose: A header file for Grid
  Date Created:	4/11/2018
- Modifications:	
+ Modifications:	4/16/2018 Documented
 ************************/
 
 #include "Tile.h"

@@ -1,1 +1,19 @@
-﻿
+﻿  Alchemy.cpp
+  Grid.cpp
+c:\users\gmanf\school\cst211\cst211\lab1\lab1\grid.cpp(26): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
+c:\users\gmanf\school\cst211\cst211\lab1\lab1\grid.cpp(37): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
+c:\users\gmanf\school\cst211\cst211\lab1\lab1\grid.cpp(48): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
+c:\users\gmanf\school\cst211\cst211\lab1\lab1\grid.cpp(62): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
+c:\users\gmanf\school\cst211\cst211\lab1\lab1\grid.cpp(139): warning C4101: 'e': unreferenced local variable
+c:\users\gmanf\school\cst211\cst211\lab1\lab1\grid.cpp(154): warning C4101: 'e': unreferenced local variable
+c:\users\gmanf\school\cst211\cst211\lab1\lab1\grid.cpp(169): warning C4101: 'e': unreferenced local variable
+c:\users\gmanf\school\cst211\cst211\lab1\lab1\grid.cpp(184): warning C4101: 'e': unreferenced local variable
+c:\users\gmanf\school\cst211\cst211\lab1\lab1\grid.cpp(309): warning C4101: 'e': unreferenced local variable
+c:\users\gmanf\school\cst211\cst211\lab1\lab1\grid.cpp(321): warning C4101: 'e': unreferenced local variable
+c:\users\gmanf\school\cst211\cst211\lab1\lab1\grid.cpp(333): warning C4101: 'e': unreferenced local variable
+c:\users\gmanf\school\cst211\cst211\lab1\lab1\grid.cpp(345): warning C4101: 'e': unreferenced local variable
+c:\users\gmanf\school\cst211\cst211\lab1\lab1\grid.cpp(350): warning C4101: 'e': unreferenced local variable
+  test_assign2.cpp
+c:\users\gmanf\school\cst211\cst211\lab1\lab1\test_assign2.cpp(217): warning C4101: 'e': unreferenced local variable
+  Generating Code...
+  Lab1.vcxproj -> C:\Users\gmanf\School\CST211\CST211\Lab1\Debug\Lab1.exe
