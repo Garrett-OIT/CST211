@@ -5,8 +5,8 @@ Date Created: 4/2/2018
 Modifications:
 
 *****************************/
+#define _CRT_SECURE_NO_WARNINGS
 #include "Exception.h"
-
 /****************
  Purpose: A default ctor for exception
  Precondition: -

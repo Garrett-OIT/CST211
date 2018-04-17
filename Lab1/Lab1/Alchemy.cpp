@@ -2,6 +2,7 @@
  Author: Garrett Fechter
 
 ****************************/
+#define NOMINMAX
 #include <iostream>
 #include "Alchemy.h"
 #include <windows.h>
@@ -10,19 +11,35 @@
 #define BACKGROUND_BLACK 0x00
 #define BACKGROUND_GOLD 0x60
 
-#undef max
 #define CLEAR_CIN_BUFFER cin.clear(); cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n')
-//pesky windows max macro definition
 
 using std::cout;
 using std::cin;
 
+/******************************
+Method: Alchemy()
+Purpose: Default ctor
+Precondition: -
+Postcondition: Creates new Alchemy with empty grid, cauldron, score = 0
+*******************************/
 Alchemy::Alchemy() : m_board(5, 5), m_score(0)
 { }
 
+/******************************
+Method: Alchemy(const Alchemy & copy)
+Purpose: Copy ctor
+Precondition: Takes existing alchemy
+Postcondition: Creates new alchemy with properties of copy
+*******************************/
 Alchemy::Alchemy(const Alchemy & copy) : m_board(copy.m_board), m_cauldron(copy.m_cauldron), m_score(copy.m_score)
 { }
 
+/******************************
+Method: operator=(const Alchemy & rhs)
+Purpose: Assignment operator
+Precondition: Takes existing Alchemy
+Postcondition: Changes this properties to deep copy of rhs
+*******************************/
 Alchemy & Alchemy::operator=(const Alchemy & rhs)
 {
 	m_board = rhs.m_board;
@@ -31,6 +48,14 @@ Alchemy & Alchemy::operator=(const Alchemy & rhs)
 	return *this;
 }
 
+/******************************
+Method: Start(int level)
+Purpose: Starts playing the game
+Precondition: Takes level which is -2 <= level <= 2, a diffulty
+	modifer (see Grid)
+Postcondition: Outputs a lot to cout, gets input from cin, and updates
+	m_board as the user plays the game
+*******************************/
 bool Alchemy::Start(int level)
 {
 	int length = m_board.GetGrid().GetRow();
@@ -40,10 +65,10 @@ bool Alchemy::Start(int level)
 	bool winnerWinner = false;
 	cout << "Hello and welcome to a version of Alchemy!\n";
 	cout << "If you don't know how to play, look it up online.\n";
-	cout << "Are you ready to play? y/n\n";
+	cout << "Are you ready to play? (Press enter to continue...)\n";
 	bool cont = true;
 	char choice = '-';
-	cin >> choice;
+	cin.get();
 	//cout << "Would you like added difficulty? y/n\n";
 	//while (cont)
 	//{
@@ -74,10 +99,10 @@ bool Alchemy::Start(int level)
 		system("CLS");
 		DisplayScore();
 		m_board.Display();
-		std::cout << "Here is the tile that you drew: ";
+		cout << "Here is the tile that you drew: ";
 		current.Display();
 		cout << "\n";
-		std::cout << "Tiles in cauldron: ";
+		cout << "Tiles in cauldron: ";
 		for (int i = 0; i < m_cauldron.GetLength(); i++) 
 		{
 			m_cauldron[i].Display(); 
@@ -89,15 +114,15 @@ bool Alchemy::Start(int level)
 			system("CLS");
 			DisplayScore();
 			m_board.Display();
-			std::cout << "Tiles in cauldron: ";
+			cout << "Tiles in cauldron: ";
 			for (int i = 0; i < m_cauldron.GetLength(); i++) 
 			{
 				m_cauldron[i].Display(); 
 				cout << " ";
 			}		
 			cout << "\n";
-			std::cout << "That wasn't a valid place to play your tile. Try again.\n";
-			std::cout << "Here is the tile that you drew: ";
+			cout << "That wasn't a valid place to play your tile. Try again.\n";
+			cout << "Here is the tile that you drew: ";
 			current.Display();
 			cout << "\n";
 		}
@@ -112,7 +137,7 @@ bool Alchemy::Start(int level)
 
 	else
 	{
-		std::cout << "Tiles in cauldron: ";
+		cout << "Tiles in cauldron: ";
 		for (int i = 0; i < m_cauldron.GetLength(); i++)
 		{
 			m_cauldron[i].Display();
@@ -121,24 +146,49 @@ bool Alchemy::Start(int level)
 		cout << "\n";
 		cout << "You lost. Better luck next time.\n";
 	}
+	CLEAR_CIN_BUFFER;
 	return winnerWinner;
 }
 
+/******************************
+Method: GetBoard() 
+Purpose: Getter for m_board
+Precondition: -
+Postcondition: -
+*******************************/
 const Grid & Alchemy::GetBoard() const
 {
 	return m_board;
 }
 
+/******************************
+Method: SetBoard(Grid & board)
+Purpose: Setter for m_board
+Precondition: -
+Postcondition: Sets m_board equal to board
+*******************************/
 void Alchemy::SetBoard(Grid & board)
 {
 	m_board = board;
 }
 
+/******************************
+Method: GetScore()
+Purpose: Getter for m_score
+Precondition: -
+Postcondition: -
+*******************************/
 const int Alchemy::GetScore() const
 {
 	return m_score;
 }
 
+/******************************
+Method: DisplayScore()
+Purpose: Outputs score to cout nicely, at coordinates (m_board length, 0)
+Precondition: -
+Postcondition: -
+*******************************/
 void Alchemy::DisplayScore() 
 {
 	HANDLE hStdout = 0;
@@ -150,9 +200,25 @@ void Alchemy::DisplayScore()
 	cout << "Score: " << m_score;
 }
 
+/******************************
+Method: ~Alchemy()
+Purpose: Destructor for Alchemy
+Precondition: -
+Postcondition: Destroys m_board and resets score and cauldron to 0 and empty
+*******************************/
 Alchemy::~Alchemy()
-{ }
+{ 
+	m_score = 0;
+}
 
+/******************************
+Method: PlaceTile(Tile & current)
+Purpose: Handles all input necessary to try and place a tile. If user specifies
+	an invalid location to place a tile, returns false
+Precondition: -
+Postcondition: A lot of cout/cin, also attempts to place a tile at specified
+	location
+*******************************/
 bool Alchemy::PlaceTile(Tile & current)
 {
 	bool placed = true;
@@ -169,7 +235,6 @@ bool Alchemy::PlaceTile(Tile & current)
 	cout << "You can also enter -1 to put ";
 	current.Display();
 	cout << " into the cauldron (a discard pile, you lose when 3 tiles are in here).\n";
-	CLEAR_CIN_BUFFER;
 	cin >> rowChoice;
 	cont = true;
 	while (cont) 
@@ -189,7 +254,7 @@ bool Alchemy::PlaceTile(Tile & current)
 
 	if (rowChoice != -1) {
 		cout << "You chose row " << rowChoice << "\n";
-		std::cout << "Here is the tile that you drew: ";
+		cout << "Here is the tile that you drew: ";
 		current.Display();
 		cout << "\nEnter the column you would like to place your tile: \n";
 		CLEAR_CIN_BUFFER;
