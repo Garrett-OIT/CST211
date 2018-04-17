@@ -1,0 +1,3 @@
+﻿  main.cpp
+z:\cst211\cst211\lab2_sorts\lab2_sorts\main.cpp(23): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
+  Lab2_sorts.vcxproj -> Z:\CST211\CST211\Lab2_sorts\Debug\Lab2_sorts.exe
