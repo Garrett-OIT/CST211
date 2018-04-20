@@ -6,7 +6,9 @@
 #define _CRT_SECURE_NO_WARNINGS
 #include "Array1D.h"
 
-#define MAX_NUMS 1000
+#define MAX_NUMS 20
+
+#define DEBUG
 
 using std::cin;
 using std::cout;
@@ -19,6 +21,18 @@ T & int_BruteBubbleSort(T & data, int length);
 
 template<typename T>
 T & int_FlaggedBubbleSort(T & data, int length);
+
+template<typename T>
+T & int_SelectionSort(T & data, int length);
+
+template<typename T>
+T & int_InsertionSort(T & data, int length);
+
+template<typename T>
+T & int_ShellSort(T & data, int length);
+
+int getStepSize(int stepNumber, int length);
+int getStepCount(int length);
 
 int main() 
 {
@@ -57,7 +71,7 @@ int main()
 //	cout << "\n---- End of Data ----\n";
 
 	Array1D<int> integers_myA_copy(integers_myA);
-	int_BruteBubbleSort<Array1D<int>>(integers_myA_copy, integers_myA_copy.GetLength());
+	int_ShellSort<Array1D<int>>(integers_myA_copy, integers_myA_copy.GetLength());
 
 	for (int i = 0; i < MAX_NUMS; i += 1) 
 	{
@@ -65,6 +79,10 @@ int main()
 	}
 	cout << "\nIntegers in sorted my array\n";
 
+	for (int i = 0; i <= getStepCount(MAX_NUMS); i++)
+	{
+		cout << "Step size " << i << " for " << MAX_NUMS << " elements: " << getStepSize(i, MAX_NUMS) << "\n";
+	}
 	char garbage;
 	cin >> garbage;
 }
@@ -72,10 +90,53 @@ int main()
 template<typename T>
 T & int_BruteBubbleSort(T & data, int length) 
 {
+	int unsortedLength = length - 1;
+	int swap;
+	for (int pass_num = 0; pass_num < length; pass_num++, unsortedLength--)
+	{
+		for (int index = 0; index < unsortedLength; index++)
+		{
+			if (data[index] > data[index + 1]) 
+			{
+				swap = data[index + 1];
+				data[index + 1] = data[index];
+				data[index] = swap;
+			}
+		}
+	}
+	return data;
+}
+
+template<typename T>
+T & int_FlaggedBubbleSort(T & data, int length) 
+{
+	bool cont = true;
+	int unsortedLength = length - 1;
+	int swap;
+	for (int pass_num = 0; (cont == true) && pass_num < length; pass_num++, unsortedLength--)
+	{
+		cont = true;
+		for (int index = 0; index < unsortedLength; index++)
+		{
+			if (data[index] > data[index + 1]) 
+			{
+				cont = false;
+				swap = data[index + 1];
+				data[index + 1] = data[index];
+				data[index] = swap;
+			}
+		}
+	}
+	return data;
+}
+
+template<typename T>
+T & int_SelectionSort(T & data, int length) 
+{
 	int index_of_largest = 0;
 	int unsortedLength = length;
 	int swap;
-	for (int pass_num = 0; pass_num < length; pass_num++, unsortedLength--)
+	for (int pass_num = 0; pass_num < length - 1; pass_num++, unsortedLength--)
 	{
 		for (int index = 0; index < unsortedLength; index++)
 		{
@@ -94,28 +155,78 @@ T & int_BruteBubbleSort(T & data, int length)
 }
 
 template<typename T>
-T & int_FlaggedBubbleSort(T & data, int length) 
+T & int_InsertionSort(T & data, int length)
 {
-	int index_of_largest = 0;
-	int unsortedLength = length;
 	int swap;
-	int done = true;
-	for (int pass_num = 0; done == true && pass_num < length; pass_num++, unsortedLength--)
+	int sortedElements = 1;
+	bool found = false;
+	int insertLocation = 1;
+	for (int current = 1; current < length; current++, sortedElements++) 
 	{
-		done = true;
-		for (int index = 0; index < unsortedLength; index++)
+		swap = data[current];
+		for (insertLocation = sortedElements; insertLocation > 0 && swap < data[insertLocation - 1]; insertLocation--)
 		{
-			if (data[index_of_largest] < data[index]) 
-			{
-				index_of_largest = index;
-				done = false;
-			}
+			data[insertLocation] = data[insertLocation - 1];
 		}
-		//place largest at end
-		swap = data[index_of_largest];
-		data[index_of_largest] = data[unsortedLength - 1];
-		data[unsortedLength - 1] = swap;
-		index_of_largest = 0;
+		//location set
+		data[insertLocation] = swap;
 	}
 	return data;
+}
+
+template<typename T>
+T & int_ShellSort(T & data, int length) 
+{
+	int stepSize = 1;
+	int swap;
+	int sortedElements = 1;
+	for (int stepNum = getStepCount(length); stepNum >= 0; stepNum--) //apply process with each step size
+	{
+#ifdef DEBUG
+		for (int i = 0; i < MAX_NUMS; i += 1)
+		{
+			cout << data[i] << " ";
+		}
+		cout << "\n---------------------------\n";
+#endif
+		stepSize = getStepSize(stepNum, length); 
+		for (int base = 0; base <= (length / stepSize); base++) //apply process for each sub array 
+		{
+			int insertLocation = base + stepSize;
+			sortedElements = 1;
+			for (int current = base + stepSize; current < length; current += stepSize, sortedElements++) //for each subarray element
+			{
+				swap = data[current]; //second element of sub array
+				for (insertLocation = base + (sortedElements * stepSize); insertLocation > base && swap < data[insertLocation - stepSize]; insertLocation -= stepSize) //looking for insert location
+				{
+					data[insertLocation] = data[insertLocation - stepSize];
+				}
+				//location set
+				data[insertLocation] = swap;
+			}
+		}
+	}
+	return data;
+}
+
+int getStepSize(int stepNumber, int length) 
+{
+	int stepSize = 1;
+	int counter = 0;
+	for (stepSize = 1; (counter < stepNumber) && ((3 * stepSize) + 1) < length; counter++) 
+	{
+		stepSize = (3 * stepSize) + 1;
+	}
+	return stepSize;
+}
+
+int getStepCount(int length) 
+{
+	int stepSize = 1;
+	int counter = 0;
+	for (stepSize = 1; ((3 * stepSize) + 1) < length; counter++) 
+	{
+		stepSize = (3 * stepSize) + 1;
+	}
+	return counter;
 }
