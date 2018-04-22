@@ -6,7 +6,7 @@
 #define _CRT_SECURE_NO_WARNINGS
 #include "Array1D.h"
 
-#define MAX_NUMS 20
+#define MAX_NUMS 20000
 
 #define DEBUG
 
@@ -33,6 +33,27 @@ T & int_ShellSort(T & data, int length);
 
 int getStepSize(int stepNumber, int length);
 int getStepCount(int length);
+
+template<typename T>
+T & int_HeapSort(T & data, int length);
+
+template<typename T>
+T & siftDown(T & data, int start, int end);
+
+template<typename T>
+T & int_MergeSort(T & data, int length);
+
+template<typename T>
+void int_MergeSort(T & data, T & tempArray, int leftIndex, int lightIndex);
+
+template<typename T>
+void int_Merge(T & data, T & tempArray, int left, int right, int rightEnd);
+
+template<typename T>
+T & int_QuickSort(T & data, int length);
+
+template<typename T>
+void int_QuickSort(T & data, int first, int last);
 
 int main() 
 {
@@ -71,7 +92,7 @@ int main()
 //	cout << "\n---- End of Data ----\n";
 
 	Array1D<int> integers_myA_copy(integers_myA);
-	int_ShellSort<Array1D<int>>(integers_myA_copy, integers_myA_copy.GetLength());
+	int_QuickSort<Array1D<int>>(integers_myA_copy, integers_myA_copy.GetLength());
 
 	for (int i = 0; i < MAX_NUMS; i += 1) 
 	{
@@ -229,4 +250,185 @@ int getStepCount(int length)
 		stepSize = (3 * stepSize) + 1;
 	}
 	return counter;
+}
+
+template<typename T>
+T & int_HeapSort(T & data, int length) 
+{
+	//first, heapify
+	for (int start = (length - 2) / 2; start >= 0; start--)
+	{
+		siftDown(data, start, length - 1);
+	}
+//#ifdef DEBUG
+//	cout << "\n---------------------------\n";
+//	for (int i = 0; i < MAX_NUMS; i += 1)
+//	{
+//		cout << data[i] << " ";
+//	}
+//	cout << "\n---------------------------\n";
+//#endif
+	int end = length - 1;
+	int swapInt;
+	while (end > 0) 
+	{
+		//swap root and last element
+		swapInt = data[0];
+		data[0] = data[end];
+		data[end] = swapInt;
+		end--;
+		siftDown(data, 0, end);
+	}
+	return data;
+}
+
+template<typename T>
+T & siftDown(T & data, int start, int end) 
+{
+	int child;
+	int root = start;
+	int swapIndex;
+	int swapInt;
+	bool notDone = true;
+	while ((root * 2) + 1 <= end && notDone)
+	{
+		child = (root * 2) + 1;
+		swapIndex = root;
+		if (data[swapIndex] < data[child])
+			swapIndex = child;
+		if (child + 1 <= end && data[swapIndex] < data[child + 1])
+			swapIndex = child + 1;
+		if (swapIndex == root) 
+		{
+			notDone = false;
+		}
+		else 
+		{
+			swapInt = data[root];
+			data[root] = data[swapIndex];
+			data[swapIndex] = swapInt;
+			root = swapIndex;
+		}
+	}
+	return data;
+}
+
+template<typename T>
+T & int_MergeSort(T & data, int length) 
+{
+	T newData(data);
+	int_MergeSort(data, newData, 0, length - 1);
+	return data;
+}
+
+template<typename T>
+void int_MergeSort(T & data, T & tempArray, int left, int right) 
+{
+	int mid;
+	if (left < right) 
+	{
+		mid = (left + right) / 2;
+		int_MergeSort(data, tempArray, left, mid);
+		int_MergeSort(data, tempArray, mid + 1, right);
+		int_Merge(data, tempArray, left, mid + 1, right);
+	}
+}
+
+template<typename T>
+void int_Merge(T & data, T & tempArray, int left, int right, int rightEnd) 
+{
+	int leftEnd = right - 1;
+	int tempPos = left;
+	int NumElements = rightEnd - left + 1;
+	int rightC = right;
+	int leftC = left;
+	while (leftC <= leftEnd && rightC <= rightEnd) {
+		if (data[leftC] <= data[rightC])
+		{
+			tempArray[tempPos] = data[leftC];
+			tempPos++;
+			leftC++;
+		}
+		else
+		{
+			tempArray[tempPos] = data[rightC];
+			tempPos++;
+			rightC++;
+		}
+	}
+	if (leftC > leftEnd) 
+	{
+		while (rightC <= rightEnd) 
+		{
+			tempArray[tempPos] = data[rightC];
+			tempPos++;
+			rightC++;
+		}
+	}
+	else if (rightC > rightEnd) 
+	{
+		while (leftC <= leftEnd) 
+		{
+			tempArray[tempPos] = data[leftC];
+			tempPos++;
+			leftC++;
+		}
+	}
+	for (int index = left; index <= rightEnd; index++) 
+	{
+		data[index] = tempArray[index];
+	}
+}
+
+template<typename T>
+T & int_QuickSort(T & data, int length) 
+{
+	int max = 0;
+	int swapInt;
+	if (length >= 2) 
+	{
+		for (int i = 0; i < length; i++) 
+		{
+			if (data[max] < data[i])
+				max = i;
+		}
+		swapInt = data[length - 1];
+		data[length - 1] = data[max];
+		data[max] = swapInt;
+		int_QuickSort(data, 0, length - 1);
+	}
+	return data;
+}
+
+template<typename T>
+void int_QuickSort(T & data, int first, int last) 
+{
+	int msmall = first + 1;
+	int large = last;
+	int pivot = data[first];//worst case if sorted
+	int swapInt;
+	while (msmall <= large) 
+	{
+		while (msmall <= last && data[msmall] < pivot)
+			msmall++;
+		while (large >= 0 && data[large] > pivot)
+			large--;
+		if (msmall < large)
+		{
+			swapInt = data[msmall];
+			data[msmall] = data[large];
+			data[large] = swapInt;
+			msmall++;
+			large--;
+		}
+		else
+			msmall++;
+	}
+	swapInt = data[large];
+	data[large] = data[first];
+	data[first] = swapInt;
+	if (first < large - 1)
+		int_QuickSort(data, first, large - 1);
+	if (last > large + 1)
+		int_QuickSort(data, large + 1, last);
 }
