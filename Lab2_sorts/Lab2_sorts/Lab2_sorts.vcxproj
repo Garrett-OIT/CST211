@@ -122,6 +122,9 @@
     <ClInclude Include="Array1D.h" />
     <ClInclude Include="Exception.h" />
   </ItemGroup>
+  <ItemGroup>
+    <Text Include="sort_results.txt" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
