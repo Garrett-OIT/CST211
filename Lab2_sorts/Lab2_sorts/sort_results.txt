@@ -1,77 +1,74 @@
 ----- Beginning sorts using native array container -----
 Every 1000 elements from the sorted data from int_BruteBubbleSort:
-0 100 203 301 400 498 595 691 795 892 
-It took int_BruteBubbleSort 383923 microseconds with 10000 elements.
+0 100 196 293 395 491 590 689 791 897 
+It took int_BruteBubbleSort 124536 microseconds with 10000 elements.
 Every 1000 elements from the sorted data from int_FlaggedBubbleSort:
-0 100 203 301 400 498 595 691 795 892 
-It took int_FlaggedBubbleSort 409285 microseconds with 10000 elements.
+0 100 196 293 395 491 590 689 791 897 
+It took int_FlaggedBubbleSort 123837 microseconds with 10000 elements.
 Every 1000 elements from the sorted data from int_SelectionSort:
-0 100 203 301 400 498 595 691 795 892 
-It took int_SelectionSort 135546 microseconds with 10000 elements.
+0 100 196 293 395 491 590 689 791 897 
+It took int_SelectionSort 121858 microseconds with 10000 elements.
 Every 1000 elements from the sorted data from int_InsertionSort:
-0 100 203 301 400 498 595 691 795 892 
-It took int_InsertionSort 67240 microseconds with 10000 elements.
+0 100 196 293 395 491 590 689 791 897 
+It took int_InsertionSort 15338 microseconds with 10000 elements.
 Every 1000 elements from the sorted data from int_ShellSort:
-0 100 203 301 400 498 595 691 795 892 
-It took int_ShellSort 270881 microseconds with 10000 elements.
+0 100 196 293 395 491 590 689 791 897 
+It took int_ShellSort 65314 microseconds with 10000 elements.
 Every 1000 elements from the sorted data from int_HeapSort:
-0 100 203 301 400 498 595 691 795 892 
-It took int_HeapSort 2945 microseconds with 10000 elements.
+0 100 196 293 395 491 590 689 791 897 
+It took int_HeapSort 975 microseconds with 10000 elements.
 Every 1000 elements from the sorted data from int_MergeSort:
-0 100 203 301 400 498 595 691 795 892 
-It took int_MergeSort 2348 microseconds with 10000 elements.
+0 100 196 293 395 491 590 689 791 897 
+It took int_MergeSort 723 microseconds with 10000 elements.
 Every 1000 elements from the sorted data from int_QuickSort:
-0 100 203 301 400 498 595 691 795 892 
-It took int_QuickSort 1140 microseconds with 10000 elements.
+0 100 196 293 395 491 590 689 791 897 
+It took int_QuickSort 522 microseconds with 10000 elements.
 ----- Beginning sorts using vector container -----
 Every 1000 elements from the sorted data from int_BruteBubbleSort:
-0 100 203 301 400 498 595 691 795 892 
-It took int_BruteBubbleSort 50303865 microseconds with 10000 elements.
+0 100 196 293 395 491 590 689 791 897 
+It took int_BruteBubbleSort 122535 microseconds with 10000 elements.
 Every 1000 elements from the sorted data from int_FlaggedBubbleSort:
-0 100 203 301 400 498 595 691 795 892 
-It took int_FlaggedBubbleSort 49400241 microseconds with 10000 elements.
+0 100 196 293 395 491 590 689 791 897 
+It took int_FlaggedBubbleSort 117087 microseconds with 10000 elements.
 Every 1000 elements from the sorted data from int_SelectionSort:
-0 100 203 301 400 498 595 691 795 892 
-It took int_SelectionSort 24012086 microseconds with 10000 elements.
+0 100 196 293 395 491 590 689 791 897 
+It took int_SelectionSort 121948 microseconds with 10000 elements.
 Every 1000 elements from the sorted data from int_InsertionSort:
-0 100 203 301 400 498 595 691 795 892 
-It took int_InsertionSort 18277744 microseconds with 10000 elements.
+0 100 196 293 395 491 590 689 791 897 
+It took int_InsertionSort 12035 microseconds with 10000 elements.
 Every 1000 elements from the sorted data from int_ShellSort:
-0 100 203 301 400 498 595 691 795 892 
-It took int_ShellSort 41076838 microseconds with 10000 elements.
+0 100 196 293 395 491 590 689 791 897 
+It took int_ShellSort 71672 microseconds with 10000 elements.
 Every 1000 elements from the sorted data from int_HeapSort:
-0 100 203 301 400 498 595 691 795 892 
-It took int_HeapSort 233429 microseconds with 10000 elements.
+0 100 196 293 395 491 590 689 791 897 
+It took int_HeapSort 967 microseconds with 10000 elements.
 Every 1000 elements from the sorted data from int_MergeSort:
-0 100 203 301 400 498 595 691 795 892 
-It took int_MergeSort 186955 microseconds with 10000 elements.
+0 100 196 293 395 491 590 689 791 897 
+It took int_MergeSort 793 microseconds with 10000 elements.
 Every 1000 elements from the sorted data from int_QuickSort:
-0 100 203 301 400 498 595 691 795 892 
-It took int_QuickSort 76767 microseconds with 10000 elements.
+0 100 196 293 395 491 590 689 791 897 
+It took int_QuickSort 494 microseconds with 10000 elements.
 ----- Beginning sorts using my Array1D container -----
 Every 1000 elements from the sorted data from int_BruteBubbleSort:
-0 100 203 301 400 498 595 691 795 892 
-It took int_BruteBubbleSort 5769511 microseconds with 10000 elements.
+0 100 196 293 395 491 590 689 791 897 
+It took int_BruteBubbleSort 166139 microseconds with 10000 elements.
 Every 1000 elements from the sorted data from int_FlaggedBubbleSort:
-0 100 203 301 400 498 595 691 795 892 
-It took int_FlaggedBubbleSort 5894336 microseconds with 10000 elements.
+0 100 196 293 395 491 590 689 791 897 
+It took int_FlaggedBubbleSort 163018 microseconds with 10000 elements.
 Every 1000 elements from the sorted data from int_SelectionSort:
-0 100 203 301 400 498 595 691 795 892 
-It took int_SelectionSort 2862979 microseconds with 10000 elements.
+0 100 196 293 395 491 590 689 791 897 
+It took int_SelectionSort 145180 microseconds with 10000 elements.
 Every 1000 elements from the sorted data from int_InsertionSort:
-0 100 203 301 400 498 595 691 795 892 
-It took int_InsertionSort 2112005 microseconds with 10000 elements.
+0 100 196 293 395 491 590 689 791 897 
+It took int_InsertionSort 32155 microseconds with 10000 elements.
 Every 1000 elements from the sorted data from int_ShellSort:
-0 100 203 301 400 498 595 691 795 892 
-It took int_ShellSort 4728015 microseconds with 10000 elements.
+0 100 196 293 395 491 590 689 791 897 
+It took int_ShellSort 149068 microseconds with 10000 elements.
 Every 1000 elements from the sorted data from int_HeapSort:
-0 100 203 301 400 498 595 691 795 892 
-It took int_HeapSort 30904 microseconds with 10000 elements.
+0 100 196 293 395 491 590 689 791 897 
+It took int_HeapSort 996 microseconds with 10000 elements.
 Every 1000 elements from the sorted data from int_MergeSort:
-0 100 203 301 400 498 595 691 795 892 
-It took int_MergeSort 49521 microseconds with 10000 elements.
+0 100 196 293 395 491 590 689 791 897 
+It took int_MergeSort 1001 microseconds with 10000 elements.
 Every 1000 elements from the sorted data from int_QuickSort:
-0 100 203 301 400 498 595 691 795 892 
-It took int_QuickSort 12737 microseconds with 10000 elements.
-
------ Sorts Complete -----
+0 100 196 293 395 491 590

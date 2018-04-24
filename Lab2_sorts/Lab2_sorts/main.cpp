@@ -4,6 +4,7 @@
 	Modifications: 4/20/2018 - added n^2 sorts
 				   4/21/2018 - added nlogn sorts
 				   4/23/2018 - added IO and documentation
+				   4/24/2018 - made shellsort slightly more efficent
 */
 
 
@@ -47,9 +48,6 @@ T & int_InsertionSort(T & data, int length);
 
 template<typename T>
 T & int_ShellSort(T & data, int length);
-
-int getStepSize(int stepNumber, int length);
-int getStepCount(int length);
 
 template<typename T>
 T & int_HeapSort(T & data, int length);
@@ -149,9 +147,11 @@ void runSorts(int * data, int length, ofstream & fout)
 		data_copy[i] = data[i];
 	}
 	//BRUTE BUBBLE
-	std::chrono::steady_clock::time_point start = std::chrono::steady_clock::now();//time right now
+	//time right now
+	std::chrono::steady_clock::time_point start = std::chrono::steady_clock::now();
 	int_BruteBubbleSort<int *>(data_copy, length);
-	std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();//end of time
+	//end of time
+	std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
 	std::chrono::microseconds elapsed = std::chrono::duration_cast<std::chrono::microseconds>(end - start);//elapsed time
 	cout << "Every 1000 elements from the sorted data from int_BruteBubbleSort:\n";
 	fout << "Every 1000 elements from the sorted data from int_BruteBubbleSort:\n";
@@ -677,9 +677,14 @@ T & int_ShellSort(T & data, int length)
 	int stepSize = 1;//current step size
 	int swap;//space to swap data 
 	int sortedElements = 1;//# of sorted elements
-	for (int stepNum = getStepCount(length); stepNum >= 0; stepNum--) //apply process with each step size
+	while (stepSize < length) 
 	{
-		stepSize = getStepSize(stepNum, length);
+		stepSize = (3 * stepSize) + 1;
+	}
+	//now stepSize is too big
+	stepSize = (stepSize - 1) / 3;
+	while (stepSize > 0) //apply process with each step size
+	{
 		for (int base = 0; base <= (length / stepSize); base++) //apply process for each sub array 
 		{
 			int insertLocation = base + stepSize;
@@ -695,44 +700,9 @@ T & int_ShellSort(T & data, int length)
 				data[insertLocation] = swap;
 			}
 		}
+		stepSize = (stepSize - 1) / 3;
 	}
 	return data;
-}
-
-
-/*
-	Function: getStepSize
-	Purpose: Gets the step size specified by the stepnumber and the length of the array
-		(using 3h + 1 step sizes)
-	Entry: -
-	Exit: -
-*/
-int getStepSize(int stepNumber, int length)
-{
-	int stepSize = 1;//tjhe first step size
-	int counter = 0;//count up to step number in series
-	for (stepSize = 1; (counter < stepNumber) && ((3 * stepSize) + 1) < length; counter++)
-	{
-		stepSize = (3 * stepSize) + 1;
-	}
-	return stepSize;
-}
-
-/*
-	Function: getStepCount
-	Purpose: Gets the number of steps needed for shell sort (using 3h + 1 step sizes)
-	Entry: -
-	Exit: -
-*/
-int getStepCount(int length)
-{
-	int stepSize = 1;//1st step size
-	int counter = 0;//counter until step size right before length
-	for (stepSize = 1; ((3 * stepSize) + 1) < length; counter++)
-	{
-		stepSize = (3 * stepSize) + 1;
-	}
-	return counter;
 }
 
 /*
