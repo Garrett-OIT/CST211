@@ -10,20 +10,17 @@ using std::string;
 
 typedef bool(*FunctionPointer)();  // Define a function pointer type
 
-
-// Strings to test
-const char* NAMES[] = { "Kyle", "Brit", "Seth", "Alex", "Josh", "Kian",
-"Kate", "Terry", "Ann", "Elaine", "Stephanie", "Wanda", "Oscar",
-"Oliver", "Tobey" };
-
-const int NUM_NAMES = 15;
-
 // Test function declaration
 bool Node_empty_test();
 bool Node_not_empty_test();
 bool LL_canon();
-// OneDimArray of test functions
-FunctionPointer test_functions[] = { Node_empty_test , Node_not_empty_test , LL_canon };
+bool LL_2();
+bool LL_extracterino();
+bool LL_ins_before();
+bool LL_ins_after();
+
+FunctionPointer test_functions[] = { Node_empty_test , Node_not_empty_test , LL_canon , LL_2
+									, LL_extracterino , LL_ins_before, LL_ins_after};
 
 
 int main()
@@ -142,6 +139,8 @@ bool LL_canon()
 {
 	bool pass = true;
 	LL<int> myLinked;
+	if (!myLinked.isEmpty())
+		pass = false;
 	for (int i = 0; i < 100; i++) 
 	{
 		myLinked.Append(i);
@@ -168,6 +167,154 @@ bool LL_canon()
 	if (myLinked.getHead()->getPrev() != nullptr || myL_copy.getHead()->getPrev() != nullptr)
 		pass = false;
 	if (myLinked.getTail()->getNext() != nullptr || myL_copy.getTail()->getNext() != nullptr)
+		pass = false;
+	return pass;
+}
+
+bool LL_2() 
+{
+	bool pass = true;
+	LL<string> myLinked;
+	if (!myLinked.isEmpty())
+		pass = false;
+	myLinked.Append("sah dude\n");
+	if (myLinked.First() != "sah dude\n")
+		pass = false;
+	if (myLinked.Last() != "sah dude\n")
+		pass = false;
+	myLinked.Append("wed burh");
+	if (myLinked.First() != "sah dude\n")
+		pass = false;
+	if (myLinked.Last() != "wed burh")
+		pass = false;
+	myLinked.Prepend("numero 1");
+	if (myLinked.First() != "numero 1")
+		pass = false;
+	if (myLinked.Last() != "wed burh")
+		pass = false;
+	myLinked.PrintForwards();
+	myLinked.PrintBackwards();
+	myLinked.Purge();
+	if (myLinked.getHead() != nullptr || myLinked.getTail() != nullptr)
+		pass = false;
+	return pass;
+}
+
+bool LL_extracterino() 
+{
+	bool pass = true;
+	LL<string> alpha;
+	alpha.Prepend("c");
+	alpha.Prepend("b");
+	alpha.Append("d");
+	alpha.Append("e");
+	alpha.Append("f");
+	alpha.Append("g");
+	alpha.Append("h");
+	alpha.Append("i");
+	alpha.Prepend("a");
+	alpha.Extract("b");
+	if (alpha.getHead()->getNext()->getData() != "c")
+		pass = false;
+	alpha.Extract("i");
+	if (alpha.Last() != "h")
+		pass = false;
+	alpha.Extract("a");
+	if (alpha.First() != "c")
+		pass = false;
+	alpha.PrintForwards();
+	alpha.PrintBackwards();
+	alpha.Purge();
+	if (alpha.getHead() != nullptr || alpha.getTail() != nullptr)
+		pass = false;
+	return pass;
+}
+
+bool LL_ins_before() 
+{
+	bool pass = true;
+	LL<string> alpha;
+	alpha.Prepend("b");
+	alpha.Append("d");
+	alpha.Append("f");
+	alpha.Append("h");
+	alpha.Append("j");
+	alpha.InsertBefore("a", "b");
+	alpha.InsertBefore("c", "d");
+	alpha.InsertBefore("e", "f");
+	alpha.InsertBefore("i", "j");
+	alpha.InsertBefore("g", "h");
+	//now I know my abc's
+	if (alpha.getHead()->getPrev() != nullptr || alpha.getHead()->getNext()->getData() != "b")
+		pass = false;
+	if (alpha.getTail()->getNext() != nullptr || alpha.getTail()->getPrev()->getData() != "i")
+		pass = false;
+	if (alpha.First() != "a" || alpha.Last() != "j")
+		pass = false;
+	alpha.PrintForwards();
+	alpha.PrintBackwards();
+	alpha.Extract("a");
+	alpha.Extract("b");
+	alpha.Extract("c");
+	alpha.Extract("d");
+	alpha.Extract("e");
+	alpha.Extract("f");
+	alpha.Extract("g");
+	alpha.Extract("h");
+	alpha.Extract("i");
+	alpha.InsertBefore("a", "j");
+	alpha.InsertBefore("b", "j");
+	alpha.InsertBefore("c", "j");
+	alpha.InsertBefore("d", "j");
+	alpha.InsertBefore("e", "j");
+	alpha.InsertBefore("f", "j");
+	alpha.InsertBefore("g", "j");
+	alpha.InsertBefore("h", "j");
+	alpha.InsertBefore("i", "j");
+	alpha.PrintForwards();
+	alpha.PrintBackwards();
+	if (alpha.getHead()->getPrev() != nullptr || alpha.getHead()->getNext()->getData() != "b")
+		pass = false;
+	if (alpha.getTail()->getNext() != nullptr || alpha.getTail()->getPrev()->getData() != "i")
+		pass = false;
+	if (alpha.First() != "a" || alpha.Last() != "j")
+		pass = false;
+	alpha.Purge();
+	if (alpha.getHead() != nullptr || alpha.getTail() != nullptr)
+		pass = false;
+	return pass;
+}
+
+bool LL_ins_after() 
+{
+	bool pass = true;
+	LL<string> alpha;
+	alpha.Append("a");
+	alpha.InsertAfter("c", "a");
+	alpha.InsertAfter("e", "c");
+	alpha.InsertAfter("f", "e");
+	alpha.InsertAfter("g", "f");
+	alpha.InsertAfter("h", "g");
+	alpha.InsertAfter("i", "h");
+	alpha.InsertAfter("j", "i");
+	alpha.InsertAfter("b", "a");
+	alpha.InsertAfter("d", "c");
+	if (alpha.getHead()->getPrev() != nullptr || alpha.getHead()->getNext()->getData() != "b")
+		pass = false;
+	if (alpha.getTail()->getNext() != nullptr || alpha.getTail()->getPrev()->getData() != "i")
+		pass = false;
+	if (alpha.First() != "a" || alpha.Last() != "j")
+		pass = false;
+	alpha.PrintForwards();
+	alpha.PrintBackwards();
+	if (alpha.isEmpty())
+		pass = false;
+	alpha.Purge();
+	if (!alpha.isEmpty())
+		pass = false;
+	alpha.Purge();
+	alpha.Purge();
+	if (alpha.getHead() != nullptr || alpha.getTail() != nullptr)
 		pass = false;
 	return pass;
 }

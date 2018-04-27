@@ -21,9 +21,15 @@
     <ClInclude Include="LinkedList.h">
       <Filter>Resource Files</Filter>
     </ClInclude>
+    <ClInclude Include="Exception.h">
+      <Filter>Resource Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="A4_test_main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Exception.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
