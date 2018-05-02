@@ -1,0 +1,6 @@
+﻿  Exception.cpp
+z:\cst211\cst211\a4_garrett_fechter\a4_garrett_fechter\exception.cpp(27): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+z:\cst211\cst211\a4_garrett_fechter\a4_garrett_fechter\exception.cpp(47): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+  A4_test_main.cpp
+  Generating Code...
+  A4_Garrett_Fechter.vcxproj -> Z:\CST211\CST211\A4_Garrett_Fechter\x64\Debug\A4_Garrett_Fechter.exe

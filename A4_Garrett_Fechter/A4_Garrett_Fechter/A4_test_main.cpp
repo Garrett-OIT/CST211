@@ -148,6 +148,10 @@ bool LL_canon()
 	myLinked.PrintForwards();
 	myLinked.PrintBackwards();
 	LL<int> myL_copy(myLinked);
+	LL<int> myL_copy2;
+	myL_copy2 = myLinked;
+	myL_copy2.PrintForwards();
+	myL_copy2.PrintBackwards();
 	myL_copy.PrintForwards();
 	myL_copy.PrintBackwards();
 	Node<int> *steppin = myLinked.getHead()->getNext();
@@ -164,9 +168,16 @@ bool LL_canon()
 			pass = false;
 		steppin = steppin->getNext();
 	}
-	if (myLinked.getHead()->getPrev() != nullptr || myL_copy.getHead()->getPrev() != nullptr)
+	steppin = myL_copy2.getHead()->getNext();
+	while (steppin != nullptr)
+	{
+		if (steppin->getData() != 1 + steppin->getPrev()->getData())
+			pass = false;
+		steppin = steppin->getNext();
+	}
+	if (myLinked.getHead()->getPrev() != nullptr || myL_copy.getHead()->getPrev() != nullptr || myL_copy2.getHead()->getPrev() != nullptr)
 		pass = false;
-	if (myLinked.getTail()->getNext() != nullptr || myL_copy.getTail()->getNext() != nullptr)
+	if (myLinked.getTail()->getNext() != nullptr || myL_copy.getTail()->getNext() != nullptr || myL_copy2.getTail()->getNext() != nullptr)
 		pass = false;
 	return pass;
 }

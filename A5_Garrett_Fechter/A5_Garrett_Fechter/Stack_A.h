@@ -10,8 +10,9 @@ public:
 	Stack_A();
 	Stack_A(int stackSize);
 	Stack_A(const Stack_A<T> & copy);
+	~Stack_A();
 	Stack_A<T> & operator = (const Stack_A<T> & rhs);
-	void Push(const T & data);
+	void Push(const T data);
 	T Pop();
 	T Peek();
 	int Size(); //a getter for height
@@ -39,6 +40,12 @@ inline Stack_A<T>::Stack_A(const Stack_A & copy) : m_stack(copy.m_stack), m_heig
 { }
 
 template<typename T>
+inline Stack_A<T>::~Stack_A()
+{
+	m_height = 0;
+}
+
+template<typename T>
 inline Stack_A<T> & Stack_A<T>::operator=(const Stack_A<T> & rhs)
 {
 	m_stack = rhs.m_stack;
@@ -47,7 +54,7 @@ inline Stack_A<T> & Stack_A<T>::operator=(const Stack_A<T> & rhs)
 }
 
 template<typename T>
-inline void Stack_A<T>::Push(const T & data)
+inline void Stack_A<T>::Push(const T data)
 {
 	if (m_height + 1 > m_stack.GetLength())
 		throw Exception("Tried to Push when full\n");

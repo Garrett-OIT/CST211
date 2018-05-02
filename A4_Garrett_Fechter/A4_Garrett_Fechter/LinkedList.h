@@ -70,21 +70,22 @@ inline LL<T> & LL<T>::operator=(const LL & rhs)
 {
 	if (this != &rhs)
 	{
-		~*this; //delete
+		this->Purge(); //delete
 		m_head = nullptr;
 		m_tail = nullptr;
-		Node *copyPointer = rhs.m_head;
+		Node<T> *copyPointer = rhs.m_head;
 		if (copyPointer != nullptr)
 		{
-			m_head = new Node;
+			m_head = new Node<T>;
 			m_tail = m_head;
-			Node *copyingTo = m_head;
+			Node<T> *copyingTo = m_head;
 			copyingTo->setData(copyPointer->getData());
 			copyPointer = copyPointer->getNext();
 			while (copyPointer != nullptr)
 			{
-				copyingTo->setNext(new Node);
+				copyingTo->setNext(new Node<T>);
 				copyingTo = copyingTo->getNext();
+				copyingTo->setPrev(m_tail);
 				m_tail = copyingTo;
 				copyingTo->setData(copyPointer->getData());
 				copyPointer = copyPointer->getNext();
