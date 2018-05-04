@@ -1,3 +1,5 @@
+//Author: Garrett Fechter
+//Created 5/2/2018
 #ifndef CIRCULAR_QUEUE_H
 #define CIRCULAR_QUEUE_H
 
@@ -19,7 +21,7 @@ public:
 	bool isEmpty() const;
 	bool isFull() const;
 private:
-	Array1D<T> m_queue;
+	Array1D<T> m_array;
 	int m_first; //the index of the first element in line
 	int m_last; //the index of the last element in line
 };
@@ -69,19 +71,20 @@ inline void CircularQueue<T>::Enqueue(T data)
 template<typename T>
 inline T CircularQueue<T>::Dequeue()
 {
-	if (m_last == -1)
+	if (m_first < 0)
 		throw Exception("Can't Dequeue on empty list\n");
-	if (m_first == m_last)
-		m_first = -1;
-	T returnVal = m_array[m_last];
-	m_last--;
-	if (m_first == -1)
-		m_last = -1;
-	else if (m_last < 0) 
+	T returnVal = m_array[m_first];
+	if (m_first == m_last) 
 	{
-		m_last = m_array.GetLength() - 1;
+		m_last = -1;
+		m_first = -1;
 	}
-	return T data();
+	else 
+	{
+		m_first++;
+		m_first = m_first % m_array.GetLength();
+	}
+	return returnVal;
 }
 
 template<typename T>
@@ -98,6 +101,7 @@ inline int CircularQueue<T>::Size() const
 	int count = 0;
 	if (m_first != -1 && m_array.GetLength() != 0) //pesky mod 0 
 	{
+		count++;//has a first
 		for (int i = m_first; i != m_last; i++) 
 		{
 			count++;
@@ -111,7 +115,7 @@ template<typename T>
 inline bool CircularQueue<T>::isEmpty() const
 {
 	bool empty = false;
-	if (first == -1)
+	if (m_first == -1)
 		empty = true;
 	return empty;
 }
@@ -120,9 +124,9 @@ template<typename T>
 inline bool CircularQueue<T>::isFull() const
 {
 	bool full = false;
-	if (first == last - 1)
+	if (m_last == m_first - 1)
 		full = true;
-	if (first == 0 && last == (m_array.GetLength() - 1))
+	if (m_first == 0 && m_last == (m_array.GetLength() - 1))
 		full = true;
 	return full;
 }
