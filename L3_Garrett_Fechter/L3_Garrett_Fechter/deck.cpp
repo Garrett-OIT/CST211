@@ -112,13 +112,19 @@ void Deck::addCards(Card * toAdd, int numOfCards)//add some cards to the deck
 	m_numCards += numOfCards;
 }
 
-void Deck::shuffle()//mix the deck up lots
+void Deck::shuffle(int seed)//mix the deck up lots
 {
-	srand(clock());
+	if (seed == -1)
+		srand(clock());
+	else 
+		srand(seed);
 	Card temp;//temp place to store a card
 	int rando = 0;
 	for (int j = 0; j < 5; j++) {
-		srand(clock());
+		if (seed == 0)
+			srand(clock());
+		else 
+			srand(seed);
 		for (int i = 0; i < m_numCards; i++) {//move random cards around enough to give each card at least 5 chances to move
 			rando = rand() % m_numCards;
 			temp.setRank(m_cards[rando].getRank());

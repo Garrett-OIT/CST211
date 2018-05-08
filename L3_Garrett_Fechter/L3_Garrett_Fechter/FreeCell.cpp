@@ -1,4 +1,6 @@
 #include "FreeCell.h"
+#include <iostream>
+#include <windows.h>
 
 Card EmptyCard(EMPTY_R, EMPTY_S);
 
@@ -51,5 +53,23 @@ int FreeCell::NumFree()
 Card FreeCell::GetCard(int location)
 {
 	return m_freecells[location];
+}
+
+void FreeCell::Display()
+{ //display each card in free cell
+	//set color to white on black
+	HANDLE hStdout = 0;
+	hStdout = GetStdHandle(STD_OUTPUT_HANDLE);
+	SetConsoleTextAttribute(hStdout, 0x0F);
+	COORD cursor;
+	cursor.X = 0;
+	cursor.Y = 0;
+	SetConsoleCursorPosition(hStdout, cursor);
+	std::cout << "Free Cells:";
+	cursor.X = 0;
+	cursor.Y = 1;
+	SetConsoleCursorPosition(hStdout, cursor);
+	for (int i = 0; i < 4; i++)
+		m_freecells[i].Display();
 }
 

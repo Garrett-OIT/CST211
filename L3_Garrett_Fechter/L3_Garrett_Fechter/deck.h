@@ -48,7 +48,7 @@ public:
 	Card * getCards() const;//getter for m_cards
 	int getNumCards() const;//getter for m_numCards
 	void addCards(Card * toAdd, int numOfCards);//add some cards to the deck
-	void shuffle();//mixes up the deck a whole bunch
+	void shuffle(int seed = -1);//mixes up the deck a whole bunch
 	void resetDeck();//resets the deck back to a single, ordered deck
 	void resetDeck(int numDecks);//resets the deck back to an ordered number of specified deck
 	~Deck();//dtor for m_cards

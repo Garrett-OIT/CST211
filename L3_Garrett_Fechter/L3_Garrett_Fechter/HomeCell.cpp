@@ -1,4 +1,6 @@
 #include "HomeCell.h"
+#include <iostream>
+#include <windows.h>
 
 HomeCell::HomeCell() : m_homecells(4)
 { 
@@ -53,4 +55,25 @@ bool HomeCell::Place(Card card, int location)
 		placed = true;
 	}
 	return placed;
+}
+
+void HomeCell::Display()
+{
+	HANDLE hStdout = 0;
+	hStdout = GetStdHandle(STD_OUTPUT_HANDLE);
+	SetConsoleTextAttribute(hStdout, 0x0F);
+	COORD cursor;
+	cursor.X = 20;
+	cursor.Y = 0;
+	SetConsoleCursorPosition(hStdout, cursor);
+	std::cout << " Home Cells:";
+	cursor.X = 20;
+	cursor.Y = 1;
+	SetConsoleCursorPosition(hStdout, cursor);
+	std::cout << " ";
+	for (int i = 0; i < 4; i++) 
+	{
+		if (!m_homecells[i].isEmpty())
+			m_homecells[i].Peek().Display();
+	}
 }

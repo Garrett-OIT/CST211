@@ -52,15 +52,7 @@ void Card::Display() const
 	HANDLE hStdout = 0;
 	hStdout = GetStdHandle(STD_OUTPUT_HANDLE);
 	COORD cursor;
-	///
-//enum CardRank { //an enum for the different card ranks, starts at 0
-//	ACE = 0, TWO, THREE, FOUR, FIVE, SIX, SEVEN, EIGHT, NINE, TEN, JACK, QUEEN, KING, EMPTY_R
-//};
-//
-//enum CardSuit { //enum for different card suits
-//	CLUBS = 0, DIAMONDS, HEARTS, SPADES, EMPTY_S
-//};
-	char suits_Str[] = {'C', 'D', 'H', 'S', ' '};
+	char suits_Str[] = { char(5), char(4), char(3), char(6), ' ' };
 	std::string ranks_Str[] = { "A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K", " " };
 	CONSOLE_SCREEN_BUFFER_INFO info;
 	GetConsoleScreenBufferInfo(hStdout, &info);
@@ -71,11 +63,33 @@ void Card::Display() const
 	cursor.Y++;
 	cursor.X = baseX;
 	SetConsoleCursorPosition(hStdout, cursor);
-	std::cout << "| " << ranks_Str[m_rank] << " |";
+	std::cout << "| ";
+	//save color
+	int savedAttr = 0;
+	savedAttr = info.wAttributes;
+	//change color based on suit
+	int suitColor = 0;
+	if (m_suit == DIAMONDS || m_suit == HEARTS)
+		suitColor = 0xC;
+	else if (m_suit == CLUBS || m_suit == SPADES)
+		suitColor = 0xF;
+	SetConsoleTextAttribute(hStdout, suitColor);
+	std::cout << ranks_Str[m_rank];
+	//restore color
+	SetConsoleTextAttribute(hStdout, savedAttr);
+	if (ranks_Str[m_rank] != "10")
+		std::cout << " |";
+	else
+		std::cout << "|";
 	cursor.Y++;
 	cursor.X = baseX;
 	SetConsoleCursorPosition(hStdout, cursor);
-	std::cout << "| " << suits_Str[m_suit] << " |";
+	std::cout << "| ";
+	SetConsoleTextAttribute(hStdout, suitColor);
+	std::cout << suits_Str[m_suit];
+	//std::cout << char(3);
+	SetConsoleTextAttribute(hStdout, savedAttr);
+	std::cout << " |";
 	cursor.Y++;
 	cursor.X = baseX;
 	SetConsoleCursorPosition(hStdout, cursor);
