@@ -24,6 +24,7 @@
     <ClInclude Include="deck.h" />
     <ClInclude Include="Exception.h" />
     <ClInclude Include="FreeCell.h" />
+    <ClInclude Include="Game.h" />
     <ClInclude Include="HomeCell.h" />
     <ClInclude Include="LinkedList.h" />
     <ClInclude Include="Node.h" />
@@ -37,10 +38,11 @@
     <ClCompile Include="deck.cpp" />
     <ClCompile Include="Exception.cpp" />
     <ClCompile Include="FreeCell.cpp" />
+    <ClCompile Include="Game.cpp" />
     <ClCompile Include="HomeCell.cpp" />
+    <ClCompile Include="main.cpp" />
     <ClCompile Include="PlayCell.cpp" />
     <ClCompile Include="random.cpp" />
-    <ClCompile Include="testin.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>

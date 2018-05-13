@@ -1,2 +1,6 @@
-﻿  testin.cpp
+﻿  Game.cpp
+  PlayCell.cpp
+c:\users\gmanf\school\cst211\cst211\l3_garrett_fechter\l3_garrett_fechter\playcell.cpp(59): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
+  main.cpp
+  Generating Code...
   L3_Garrett_Fechter.vcxproj -> C:\Users\gmanf\School\CST211\CST211\L3_Garrett_Fechter\Debug\L3_Garrett_Fechter.exe

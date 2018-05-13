@@ -121,7 +121,7 @@ void Deck::shuffle(int seed)//mix the deck up lots
 	Card temp;//temp place to store a card
 	int rando = 0;
 	for (int j = 0; j < 5; j++) {
-		if (seed == 0)
+		if (seed == -1)
 			srand(clock());
 		else 
 			srand(seed);

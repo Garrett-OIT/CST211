@@ -4,6 +4,16 @@
 #include "Array1D.h"
 #include "card.h"
 
+#ifndef CHOSEN_CARD
+#define CHOSEN_CARD
+struct chosenCard 
+{
+	char location; //'F' freecell, 'H' homecell, 'P' playcell
+	int index1; //which stack (P) or array index (F and H)
+	int index2; //card num in context of 'P'
+};
+#endif
+
 class FreeCell
 {
 public:
@@ -17,8 +27,8 @@ public:
 	int NumFree();
 	Card GetCard(int location);
 	void Display();
-	void Display(char flag, int index);
-	void Display(char flag, int index, char flag2, int index2);
+	void Display(char hovering, int h_index1, int h_index2, char selected, int s_index1, int s_index2);
+	void Display(chosenCard hovering, chosenCard selected);
 private:
 	Array1D<Card> m_freecells;
 };

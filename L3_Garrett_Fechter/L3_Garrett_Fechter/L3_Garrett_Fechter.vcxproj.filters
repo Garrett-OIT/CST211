@@ -51,6 +51,9 @@
     <ClInclude Include="PlayCell.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Game.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="card.cpp">
@@ -74,7 +77,10 @@
     <ClCompile Include="PlayCell.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="testin.cpp">
+    <ClCompile Include="Game.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

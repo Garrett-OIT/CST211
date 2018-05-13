@@ -16,7 +16,7 @@ FreeCell & FreeCell::operator=(const FreeCell & rhs)
 }
 
 FreeCell::~FreeCell()
-{ 
+{
 	m_freecells.SetLength(0);
 	m_freecells.SetLength(4);
 }
@@ -24,7 +24,7 @@ FreeCell::~FreeCell()
 bool FreeCell::Place(Card card, int location)
 {
 	bool placed = false;
-	if (GetCard(location).getRank() == EMPTY_R && GetCard(location).getSuit() == EMPTY_S) 
+	if (GetCard(location).getRank() == EMPTY_R && GetCard(location).getSuit() == EMPTY_S)
 	{ //if empty
 		m_freecells[location] = card;
 		placed = true;
@@ -71,5 +71,34 @@ void FreeCell::Display()
 	SetConsoleCursorPosition(hStdout, cursor);
 	for (int i = 0; i < 4; i++)
 		m_freecells[i].Display();
+}
+
+void FreeCell::Display(char hovering, int h_index1, int h_index2, char selected, int s_index1, int s_index2)
+{
+	HANDLE hStdout = 0;
+	hStdout = GetStdHandle(STD_OUTPUT_HANDLE);
+	SetConsoleTextAttribute(hStdout, 0x0F);
+	COORD cursor;
+	cursor.X = 0;
+	cursor.Y = 0;
+	SetConsoleCursorPosition(hStdout, cursor);
+	std::cout << "Free Cells:";
+	cursor.X = 0;
+	cursor.Y = 1;
+	SetConsoleCursorPosition(hStdout, cursor);
+	for (int index = 0; index < 4; index++)
+	{
+		if (hovering == 'F' && h_index1 == index)
+			SetConsoleTextAttribute(hStdout, 0x0A);
+		if (selected == 'F' && s_index1 == index)
+			SetConsoleTextAttribute(hStdout, 0x09);
+		m_freecells[index].Display();
+		SetConsoleTextAttribute(hStdout, 0x0F);
+	}
+}
+
+void FreeCell::Display(chosenCard hovering, chosenCard selected)
+{
+	Display(hovering.location, hovering.index1, hovering.index2, selected.location, selected.index1, selected.index2);
 }
 

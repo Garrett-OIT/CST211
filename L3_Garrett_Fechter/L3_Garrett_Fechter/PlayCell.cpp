@@ -2,6 +2,8 @@
 #include <windows.h>
 #include "deck.h"
 
+bool ValidSuits(Card card1, Card card2);
+
 PlayCell::PlayCell() : m_playcells(8)
 { }
 
@@ -22,36 +24,118 @@ PlayCell::~PlayCell()
 
 Card PlayCell::GetCard(int index, int cellNum)
 {
-	Card * cards = new Card[m_playcells[cellNum].Size() - index];
-	int length = m_playcells[cellNum].Size();
+	Card * cards = new Card[index + 1];
 	int i = 0;
-	int j = length;
-	for (; j > index; i++, j--)
-		cards[i] = m_playcells[cellNum].Pop();
-	Card ret = m_playcells[cellNum].Pop();
-	cards[index] = ret;
-	for (int i = 0; i <= index; i++)
+	Card ret;
+	if (!m_playcells[cellNum].isEmpty())
 	{
-		m_playcells[cellNum].Push(cards[i]);
+		for (int i = 0; i < index; i++)
+		{
+			cards[i] = m_playcells[cellNum].Pop();
+			ret = cards[i];
+		}
+		ret = m_playcells[cellNum].Pop();
+		cards[index] = ret;
+		for (int i = index; i >= 0; i--)
+		{
+			m_playcells[cellNum].Push(cards[i]);
+		}
 	}
+	else ret = {EMPTY_R, EMPTY_S};
+	delete[] cards;
 	return ret;
+}
+
+int PlayCell::GetLength(int index)
+{
+	return m_playcells[index].Size();
+}
+
+bool PlayCell::Moveable(int numFreeCells, int index, int cellNum)
+{
+	bool canMove = true;
+	if (GetLength(cellNum) > 1)
+	{
+		int movable = (1 + numFreeCells) * pow(2, numFree());
+		if (index > (movable - 1))
+			canMove = false;
+		for (int i = index; canMove && (i > 0); i--) 
+		{
+			if (GetCard(i, cellNum).getRank() != 1 + GetCard(i - 1, cellNum).getRank())
+				canMove = false;
+			if (!ValidSuits(GetCard(i, cellNum), GetCard(i - 1, cellNum)))
+				canMove = false;
+		}
+	}
+	return canMove;
+}
+
+bool ValidSuits(Card card1, Card card2)
+{
+	bool valid = false;
+	CardSuit suits[] = { //enum for different card suits
+		CLUBS, DIAMONDS, HEARTS, SPADES, EMPTY_S
+	};//0 1 2 3
+	//valid: 
+	//	0 1
+	//	0 2	
+	//  1 3
+	//	1 0
+	//	2 3
+	//	2 0	
+	//  3 1
+	//	3 2
+	if (card1.getSuit() == suits[0])
+	{
+		if (card2.getSuit() == suits[1])
+			valid = true;
+		else if (card2.getSuit() == suits[2])
+			valid = true;
+	}
+	else if (card1.getSuit() == suits[1]) 
+	{
+		if (card2.getSuit() == suits[3])
+			valid = true;
+		if (card2.getSuit() == suits[0])
+			valid = true;
+	}
+	else if (card1.getSuit() == suits[2]) 
+	{
+		if (card2.getSuit() == suits[3])
+			valid = true;
+		else if (card2.getSuit() == suits[0])
+			valid = true;
+	}
+	else if (card1.getSuit() == suits[3]) 
+	{
+		if (card2.getSuit() == suits[1])
+			valid = true;
+		else if (card2.getSuit() == suits[2])
+			valid = true;
+	}
+	return valid;
 }
 
 bool PlayCell::Place(Card card, int index)
 {
 	bool placed = false;
-	if (m_playcells[index].isEmpty())
+
+	if (!card.isEmpty())
 	{
-		m_playcells[index].Push(card);
-		placed = true;
-	}
-	else if (m_playcells[index].Peek().getSuit() == card.getSuit() && m_playcells[index].Peek().getRank() == card.getRank() - 1)
-	{
-		m_playcells[index].Push(card);
-		placed = true;
+		if (m_playcells[index].isEmpty())
+		{
+			m_playcells[index].Push(card);
+			placed = true;
+		}
+		else if (ValidSuits(card, m_playcells[index].Peek()) && m_playcells[index].Peek().getRank() == card.getRank() + 1)
+		{
+			m_playcells[index].Push(card);
+			placed = true;
+		}
 	}
 	return placed;
 }
+
 
 void PlayCell::Init(int seed)
 {
@@ -92,7 +176,7 @@ int PlayCell::numFree()
 	int free = 0;
 	for (int i = 0; i < 8; i++)
 	{
-		if (m_playcells[i].Peek().isEmpty())
+		if (m_playcells[i].isEmpty())
 			free++;
 	}
 	return free;
@@ -121,7 +205,7 @@ void PlayCell::Display()
 	int max = cursor.Y;
 	for (int i = 0; i < 8; i++)
 	{
-		while (!copy_stack[i].isEmpty()) 
+		while (!copy_stack[i].isEmpty())
 		{
 			copy_stack[i].Pop().Display();
 			cursor.Y += 4;
@@ -159,17 +243,33 @@ void PlayCell::Display(char hovering, int h_index1, int h_index2, char selected,
 		cursor.Y = 2 + (copy_stack[index].Size() * 4);
 		SetConsoleCursorPosition(hStdout, cursor);
 		max = (max > cursor.Y) ? max : (cursor.Y + 4);
-		while (!copy_stack[index].isEmpty()) 
+		if (copy_stack[index].isEmpty())
 		{
+			//empty!
+			cursor.Y = 2 + 4;
+			SetConsoleCursorPosition(hStdout, cursor);
 			if (hovering == 'P' && numPopped == h_index2 && h_index1 == index)
 				SetConsoleTextAttribute(hStdout, 0x0A);
 			if (selected == 'P' && numPopped == s_index2 && s_index1 == index)
 				SetConsoleTextAttribute(hStdout, 0x09);
-			copy_stack[index].Pop().Display();
+			Card empty;
+			empty.Display();
 			SetConsoleTextAttribute(hStdout, 0x0F);
-			numPopped++;
-			cursor.Y -= 4;
-			SetConsoleCursorPosition(hStdout, cursor);
+		}
+		else
+		{
+			while (!copy_stack[index].isEmpty())
+			{
+				if (hovering == 'P' && numPopped == h_index2 && h_index1 == index)
+					SetConsoleTextAttribute(hStdout, 0x0A);
+				if (selected == 'P' && numPopped <= s_index2 && s_index1 == index)
+					SetConsoleTextAttribute(hStdout, 0x09);
+				copy_stack[index].Pop().Display();
+				SetConsoleTextAttribute(hStdout, 0x0F);
+				numPopped++;
+				cursor.Y -= 4;
+				SetConsoleCursorPosition(hStdout, cursor);
+			}
 		}
 		cursor.X += 5;
 		SetConsoleCursorPosition(hStdout, cursor);
@@ -177,5 +277,9 @@ void PlayCell::Display(char hovering, int h_index1, int h_index2, char selected,
 	cursor.Y = max;
 	cursor.X = 0;
 	SetConsoleCursorPosition(hStdout, cursor);
+}
 
+void PlayCell::Display(chosenCard hovering, chosenCard selected)
+{
+	Display(hovering.location, hovering.index1, hovering.index2, selected.location, selected.index1, selected.index2);
 }
