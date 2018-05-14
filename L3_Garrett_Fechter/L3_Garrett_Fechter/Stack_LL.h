@@ -1,8 +1,31 @@
+//Garrett Fechter
+//Purpose: a stack implementation using a linked list
+//Created 2018
+//Modified: 
 #ifndef STACK_LL_H
 #define STACK_LL_H
 
 #include "LinkedList.h"
 
+/*
+	Stack_LL();
+		a default ctor. m_heigth of 0, empty LL
+	Stack_LL(const Stack_LL<T> & copy);
+		copy ctor
+	Stack_LL<T> & operator = (const Stack_LL<T> & rhs);
+		overaloaded assignment operator
+	~Stack_LL();
+		destructor. resets ll
+	void Push(const T data);
+		put something on stack
+	T Pop();
+		take top element off and return it
+	T Peek();
+		just return top element of stack
+	int Size();//getter for height
+	bool isEmpty();
+		true if 0 elements
+*/
 template<typename T>
 class Stack_LL 
 {
@@ -17,8 +40,8 @@ public:
 	int Size();//getter for height
 	bool isEmpty();
 private:
-	int m_height;
-	LL<T> m_stack;
+	int m_height;//# of elements in LL
+	LL<T> m_stack;//the stack
 };
 
 #endif

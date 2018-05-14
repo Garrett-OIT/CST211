@@ -1,3 +1,8 @@
+//Garrett Fechter
+//Purpose: some random functions
+//Created 2017
+//Modified: 
+
 #ifndef RANDOM_H
 #define RANDOM_H	
 

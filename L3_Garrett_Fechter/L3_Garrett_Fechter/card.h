@@ -1,3 +1,8 @@
+//Garrett Fechter
+//Purpose: 
+//Created 2017
+//Modified: 2018 - added Display function
+
 #ifndef CARD_H
 #define CARD_H
 

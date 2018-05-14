@@ -1,3 +1,8 @@
+//Garrett Fechter
+//Purpose: implementation of deck
+//Created 2017
+//Modified: 
+
 #include "deck.h"
 
 #define NO_CARDS_IN_DECK -1

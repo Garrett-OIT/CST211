@@ -1,11 +1,36 @@
+//Garrett Fechter
+//Purpose: implementation of game
+//Created 2018
+//Modified: 
+
 #include "Game.h"
 
+/****************
+Purpose: default ctor. hovering starts off in top right
+Precondition: -
+Postcondition: -
+*****************/
 Game::Game() : m_hovering({ 'F', 0, 0 }), m_selected({ ' ', 0, 0 })
 { }
 
+/****************
+Purpose: dtor. resets hovering and selected
+Precondition: -
+Postcondition: resets everything
+*****************/
 Game::~Game()
-{ }
+{
+	m_hovering = { 'F', 0, 0 };
+	m_selected = { '0', 0, 0 };
+}
 
+/****************
+Note - this function (ClearScreen) was copied from the StackOverflow (the internet).
+	I did not write this function, and am only using it as a convenient alternate to system("cls")
+Purpose: a useful function to clear the screen. faster and better than system("cls")
+Precondition: -
+Postcondition: clears screen
+*****************/
 void ClearScreen()
 {
 	HANDLE                     hStdOut;
@@ -43,6 +68,13 @@ void ClearScreen()
 	SetConsoleCursorPosition(hStdOut, homeCoords);
 }
 
+/****************
+Purpose: play a game of freecells
+Precondition: seed specifies the seed that a deck will be shuffled with
+	-1 means use srand. 0 means dont shuffle. otherwise will use seed to seed
+Postcondition: moves cards all around between different sections. lots of input and output
+	moves hovering and selected all around
+*****************/
 bool Game::Start(int seed)
 {
 	ClearScreen();
@@ -134,7 +166,7 @@ bool Game::Start(int seed)
 							if (m_playcell.GetLength(m_hovering.index1 - 1) == 0)
 								m_hovering.index2 = m_playcell.GetLength(m_hovering.index1) - 1;
 							else
-								m_hovering.index2 = m_playcell.GetLength(m_hovering.index1) - 1 - (m_playcell.GetLength(m_hovering.index1 - 1) -1 - m_hovering.index2);
+								m_hovering.index2 = m_playcell.GetLength(m_hovering.index1) - 1 - (m_playcell.GetLength(m_hovering.index1 - 1) - 1 - m_hovering.index2);
 							if (m_hovering.index2 > (m_playcell.GetLength(m_hovering.index1)))
 								m_hovering.index2 = m_playcell.GetLength(m_hovering.index1);
 							if (m_hovering.index2 < 0)
@@ -264,10 +296,22 @@ bool Game::Start(int seed)
 		}
 	}
 	if (m_homecell.win())
+	{
+		ClearScreen();
+		m_homecell.Display(m_hovering, m_selected);
+		m_freecell.Display(m_hovering, m_selected);
+		m_playcell.Display(m_hovering, m_selected);
 		cout << "Congratulations!!! You won!\n";
+
+	}
 	return m_homecell.win();
 }
 
+/****************
+Purpose: assignment operator
+Precondition: -
+Postcondition: -
+*****************/
 Game & Game::operator=(const Game & rhs)
 {
 	m_playcell = rhs.m_playcell;
@@ -278,5 +322,10 @@ Game & Game::operator=(const Game & rhs)
 	return *this;
 }
 
+/****************
+Purpose: copy ctor
+Precondition: -
+Postcondition: -
+*****************/
 Game::Game(const Game & copy) : m_playcell(copy.m_playcell), m_homecell(copy.m_homecell), m_freecell(copy.m_freecell), m_hovering(copy.m_hovering), m_selected(copy.m_selected)
 { }

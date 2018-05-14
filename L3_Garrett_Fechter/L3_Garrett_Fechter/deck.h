@@ -1,3 +1,8 @@
+//Garrett Fechter
+//Purpose: a deck of cards
+//Created 2017
+//Modified: 
+
 #ifndef DECK_H
 #define DECK_H
 

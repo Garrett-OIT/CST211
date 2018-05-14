@@ -1,27 +1,56 @@
+//Garrett Fechter
+//Purpose: playcell implementation
+//Created 2018
+//Modified: 
 #include "PlayCell.h"
 #include <windows.h>
 #include "deck.h"
 
 bool ValidSuits(Card card1, Card card2);
 
+/****************
+Purpose: default ctor. there are 8 playcells
+Precondition: -
+Postcondition: -
+*****************/
 PlayCell::PlayCell() : m_playcells(8)
 { }
 
+/****************
+Purpose: copy ctor
+Precondition: -
+Postcondition: -
+*****************/
 PlayCell::PlayCell(const PlayCell & copy) : m_playcells(copy.m_playcells)
 { }
 
+/****************
+Purpose: overloaded assignment operator
+Precondition: -
+Postcondition:- 
+*****************/
 PlayCell & PlayCell::operator=(const PlayCell & rhs)
 {
 	m_playcells = rhs.m_playcells;
 	return *this;
 }
 
+/****************
+Purpose: dtor. resets playcell stacks to empty
+Precondition: -
+Postcondition: -
+*****************/
 PlayCell::~PlayCell()
 {
 	m_playcells.SetLength(0);
 	m_playcells.SetLength(8);
 }
 
+/****************
+Purpose: get a soecified card
+Precondition: specified index and cellNum need to be in range 
+Postcondition: -
+*****************/
 Card PlayCell::GetCard(int index, int cellNum)
 {
 	Card * cards = new Card[index + 1];
@@ -46,11 +75,21 @@ Card PlayCell::GetCard(int index, int cellNum)
 	return ret;
 }
 
+/****************
+Purpose: get length (height) of specified stack
+Precondition: index should be valid
+Postcondition: -
+*****************/
 int PlayCell::GetLength(int index)
 {
 	return m_playcells[index].Size();
 }
 
+/****************
+Purpose: determine whether or not a selected card is valid
+Precondition: numFreeCells is the number of freecells. index must be valid
+Postcondition: -
+*****************/
 bool PlayCell::Moveable(int numFreeCells, int index, int cellNum)
 {
 	bool canMove = true;
@@ -70,6 +109,11 @@ bool PlayCell::Moveable(int numFreeCells, int index, int cellNum)
 	return canMove;
 }
 
+/****************
+Purpose: determine if two cards have compatible suits (red on black)
+Precondition: -
+Postcondition: -
+*****************/
 bool ValidSuits(Card card1, Card card2)
 {
 	bool valid = false;
@@ -116,6 +160,11 @@ bool ValidSuits(Card card1, Card card2)
 	return valid;
 }
 
+/****************
+Purpose: place a card on stack specified
+Precondition: index must be valid
+Postcondition: adds a card to a stack if successful
+*****************/
 bool PlayCell::Place(Card card, int index)
 {
 	bool placed = false;
@@ -137,6 +186,11 @@ bool PlayCell::Place(Card card, int index)
 }
 
 
+/****************
+Purpose: initialize playcells for a game. seed -1 means shuffle seeding srand, 0 means no shuffling, otherwise gets a specific game
+Precondition: -
+Postcondition: gets rid of any cards currently in playcells and then intializes em for a game
+*****************/
 void PlayCell::Init(int seed)
 {
 	m_playcells.SetLength(0);
@@ -171,6 +225,12 @@ void PlayCell::Init(int seed)
 	}
 }
 
+
+/****************
+Purpose: get # OF free playcells (empty)
+Precondition: -
+Postcondition: -
+*****************/
 int PlayCell::numFree()
 {
 	int free = 0;
@@ -182,11 +242,21 @@ int PlayCell::numFree()
 	return free;
 }
 
+/****************
+Purpose: remove a card
+Precondition: cellNum must be valid
+Postcondition:  -
+*****************/
 void PlayCell::RemoveCard(int cellNum)
 {
 	m_playcells[cellNum].Pop();
 }
 
+/****************
+Purpose: display cards
+Precondition: -
+Postcondition: -
+*****************/
 void PlayCell::Display()
 {
 	HANDLE hStdout = 0;
@@ -221,6 +291,11 @@ void PlayCell::Display()
 	SetConsoleCursorPosition(hStdout, cursor);
 }
 
+/****************
+Purpose: display cards
+Precondition: info specified chooses an index for selected and hovering cards (changes color)
+Postcondition: -
+*****************/
 void PlayCell::Display(char hovering, int h_index1, int h_index2, char selected, int s_index1, int s_index2)
 {
 	HANDLE hStdout = 0;
@@ -279,6 +354,11 @@ void PlayCell::Display(char hovering, int h_index1, int h_index2, char selected,
 	SetConsoleCursorPosition(hStdout, cursor);
 }
 
+/****************
+Purpose: display cards
+Precondition: info specified chooses an index for selected and hovering cards (changes color)
+Postcondition: -
+*****************/
 void PlayCell::Display(chosenCard hovering, chosenCard selected)
 {
 	Display(hovering.location, hovering.index1, hovering.index2, selected.location, selected.index1, selected.index2);

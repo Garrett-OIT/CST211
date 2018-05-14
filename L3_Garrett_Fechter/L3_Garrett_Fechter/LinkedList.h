@@ -1,3 +1,8 @@
+//Garrett Fechter
+//Purpose: linked list ADT
+//Created 2018
+//Modified: 
+
 #ifndef LINKEDLIST_H
 #define LINKEDLIST_H
 
@@ -7,6 +12,48 @@
 #define DEBUG_TESTING
 
 using std::cout;
+
+/*
+	Class: LL
+	Purpose: an ADT linked list
+	funcs:
+	LL();
+		default ctor
+	LL(const LL & copy);
+		copy ctor
+	LL<T> & operator = (const LL & rhs);
+		overloaded assigmnet operator
+	void Append(T data);
+		append some data to end of LL
+	void Prepend(T data);
+		prepend data to beginning of LL
+	bool isEmpty() const;
+		whether or not m_head is nullptrj
+	const T & First() const;
+		return data of first node
+	const T & Last() const;
+		return data of last node
+	void Extract(const T & data);
+		get rid of a node that matches data
+	void InsertBefore(T newData, const T & oldData);
+		insert a node before the node that has data matching data
+	void InsertAfter(T newData, const T & oldData);
+		insert a node after the node that has data matching data
+#ifdef DEBUG_TESTING
+	void PrintForwards();
+		display the list traversing forwards
+	void PrintBackwards();
+		display the list traversing backwards
+	Node<T> * getHead();
+		getter for m_head
+	Node<T> * getTail();
+		getter for M_tial
+#endif
+	void Purge();
+		delete all the data in the LL, reset to intial conditions (nullptr head/tail
+	~LL();
+		dtor
+*/
 
 template<typename T>
 class LL
@@ -32,8 +79,8 @@ public:
 	void Purge();
 	~LL();
 private:
-	Node<T> *m_head;
-	Node<T> *m_tail;
+	Node<T> *m_head; //the first node of the LL
+	Node<T> *m_tail;//the last node of LL
 };
 
 #endif

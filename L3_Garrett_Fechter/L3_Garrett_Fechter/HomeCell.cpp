@@ -1,7 +1,17 @@
+//Garrett Fechter
+//Purpose: implementation of homecell
+//Created 2018
+//Modified: 
+
 #include "HomeCell.h"
 #include <iostream>
 #include <windows.h>
 
+/****************
+Purpose: defaulkt ctor. there are 4 homecells
+Precondition: -
+Postcondition: -
+*****************/
 HomeCell::HomeCell() : m_homecells(4)
 { 
 	for (int i = 0; i < 4; i++)
@@ -10,15 +20,30 @@ HomeCell::HomeCell() : m_homecells(4)
 	}
 }
 
+/****************
+Purpose: copy ctor
+Precondition: -
+Postcondition: -
+*****************/
 HomeCell::HomeCell(const HomeCell & copy) : m_homecells(copy.m_homecells)
 { }
 
+/****************
+Purpose: overloaded assignment operator
+Precondition: -
+Postcondition: -
+*****************/
 HomeCell & HomeCell::operator=(const HomeCell & rhs)
 {
 	m_homecells = rhs.m_homecells;
 	return *this;
 }
 
+/****************
+Purpose: dtor. resets cards.
+Precondition: -
+Postcondition: -
+*****************/
 HomeCell::~HomeCell()
 {
 	for (int i = 0; i < 4; i++)
@@ -27,7 +52,11 @@ HomeCell::~HomeCell()
 		m_homecells[i].SetSize(13);
 	}
 }
-
+/****************
+Purpose: check if game was won 
+Precondition: -
+Postcondition: -
+*****************/
 bool HomeCell::win()
 {
 	bool won = true;
@@ -44,6 +73,11 @@ bool HomeCell::win()
 	return won;
 }
 
+/****************
+Purpose: place a card at location
+Precondition: location must be valid
+Postcondition: put card at location 
+*****************/
 bool HomeCell::Place(Card card, int location)
 {
 	bool placed = false;
@@ -68,6 +102,11 @@ bool HomeCell::Place(Card card, int location)
 	return placed;
 }
 
+/****************
+Purpose: display all the homecell cards
+Precondition: -
+Postcondition: -
+*****************/
 void HomeCell::Display()
 {
 	HANDLE hStdout = 0;
@@ -89,6 +128,11 @@ void HomeCell::Display()
 	}
 }
 
+/****************
+Purpose: display all the homecell cards with extra info about hovering/selected card (uses colors)
+Precondition: indicies must be valid
+Postcondition: -
+*****************/
 void HomeCell::Display(char hovering, int h_index1, int h_index2, char selected, int s_index1, int s_index2)
 {
 	HANDLE hStdout = 0;
@@ -122,6 +166,11 @@ void HomeCell::Display(char hovering, int h_index1, int h_index2, char selected,
 	}
 }
 
+/****************
+Purpose: display all the homecell cards with extra info about hovering/selected card (uses colors)
+Precondition: indicies must be valid
+Postcondition: -
+*****************/
 void HomeCell::Display(chosenCard hovering, chosenCard selected)
 {
 	Display(hovering.location, hovering.index1, hovering.index2, selected.location, selected.index1, selected.index2);

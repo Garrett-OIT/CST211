@@ -1,3 +1,8 @@
+//Garrett Fechter
+//Purpose: implementation of card 
+//Created 2018
+//Modified: 
+
 #include <windows.h>
 #include <string>
 #include <iostream>

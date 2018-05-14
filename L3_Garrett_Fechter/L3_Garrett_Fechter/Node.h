@@ -1,5 +1,35 @@
+//Garrett Fechter
+//Purpose: a node for a LL, ADT
+//Created 2018
+//Modified: 
 #ifndef NODE_H
 #define NODE_H
+
+/*
+ Class: Node
+ Purpose: Generic ADT node for a linked list
+ canoncial funcS:
+	Node();//default ctor
+	Node(const Node & copy);
+		copy ctor
+	Node & operator = (const Node & rhs);
+		overload assigmnet operator
+	~Node();
+		dtor. m_data empty, nullptr prev/next
+ Funcs:
+	Node<T> * getNext();
+		get the node pointed to by m_next
+	void setNext(Node * next);
+		set the node pointed to by m_next
+	Node<T> * getPrev();
+		getter for m_prev
+	void setPrev(Node * prev);
+		setter for m_prev
+	T & getData();
+		return the data in a node
+	void setData(T data);
+		set the data in a node
+*/
 
 template<typename T>
 class Node 

@@ -1,7 +1,33 @@
+//Garrett Fechter
+//Purpose: stack using array
+//Created 2018
+//Modified: 
+
 #ifndef STACK_A
 #define STACK_A
 
 #include "Array1D.h"
+/*
+	Stack_LL();
+		a default ctor. m_heigth of 0, empty LL
+	Stack_LL(const Stack_LL<T> & copy);
+		copy ctor
+	Stack_LL<T> & operator = (const Stack_LL<T> & rhs);
+		overaloaded assignment operator
+	~Stack_LL();
+		destructor. resets ll
+	void Push(const T data);
+		put something on stack
+	T Pop();
+		take top element off and return it
+	T Peek();
+		just return top element of stack
+	int Size();//getter for height
+	bool isEmpty();
+		true if 0 elements
+	bool isFull
+		true if contains max elements
+*/
 
 template<typename T>
 class Stack_A
@@ -22,7 +48,7 @@ public:
 	bool isFull();
 private:
 	int m_height;//how many elements stacked
-	Array1D<T> m_stack;
+	Array1D<T> m_stack;//the stack
 };
 
 #endif
