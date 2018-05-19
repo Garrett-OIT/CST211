@@ -23,7 +23,7 @@ private:
 };
 
 template<typename T>
-inline TreeNode<T>::TreeNode() : m_data(), m_next(nullptr), m_prev(nullptr)
+inline TreeNode<T>::TreeNode() : m_data(T()), m_next(nullptr), m_prev(nullptr)
 { }
 
 template<typename T>
@@ -86,8 +86,8 @@ template<typename T>
 inline TreeNode<T>::~TreeNode()
 {
 	m_data = T();
-	m_next = nullptr;
-	m_prev = nullptr;
+	m_right = nullptr;
+	m_left = nullptr;
 }
 
 #endif

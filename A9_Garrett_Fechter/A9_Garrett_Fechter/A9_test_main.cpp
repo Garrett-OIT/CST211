@@ -13,8 +13,9 @@ typedef bool(*FunctionPointer)();  // Define a function pointer type
 								   // Test function declaration
 
 bool t_insert();
+bool t_del();
 
-FunctionPointer test_functions[] = { t_insert };
+FunctionPointer test_functions[] = { t_insert, t_del };
 
 
 int main()
@@ -46,6 +47,14 @@ void Display_and_Sum(const int & data)
 	cout << "SUM: " << sum << "\n";
 }
 
+void Display_and_Sum1(const int & data) 
+{
+	static int sum = 0;
+	cout << data << "\n";
+	sum += data;
+	cout << "SUM: " << sum << "\n";
+}
+
 bool t_insert() 
 {
 	bool pass = true;
@@ -59,3 +68,20 @@ bool t_insert()
 	return pass;
 }
 
+bool t_del() 
+{
+	bool pass = true;
+	BST<int> ints;
+	for (int i = 0; i < 100; i += 10) 
+	{
+		for (int j = i; j > i - 5; j--)
+			ints.Insert(j);
+	}
+	for (int i = 50; i < 100; i += 10) 
+	{
+		for (int j = i; j > i - 5; j--)
+			ints.Delete(j);
+	}
+	ints.InOrder(Display_and_Sum1);
+	return pass;
+}

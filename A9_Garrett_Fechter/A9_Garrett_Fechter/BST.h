@@ -2,6 +2,7 @@
 #define BST_H
 
 #include "TreeNode.h"
+#include "Exception.h"
 
 template <typename T>
 class BST
@@ -17,6 +18,7 @@ public:
 	//int Height();
 	void InOrder(void(*visit) (const T & data));
 private:
+	void DeleteFromTree(TreeNode<T> * parent, T del);
 	void InOrder(void(*visit) (const T & data), TreeNode<T> *root);
 	TreeNode<T> *m_root;
 };
@@ -75,25 +77,97 @@ inline void BST<T>::Insert(T ins)
 template<typename T>
 inline void BST<T>::Delete(T del)
 {
+	if (m_root == nullptr)
+		throw Exception("Can't delete from empty tree\n");
 	TreeNode<T> *curr = m_root;
-	TreeNode<T> *trail = nullptr;
-	while (curr != nullptr) 
+	TreeNode<T> *trail = m_root;
+	bool found = false;
+	while (curr != nullptr && !found) 
 	{
-		if (curr.getData() == del)
-		{
-			//delete
-		}
-		else if (curr.getData() > del) 
+		if (curr->getData() == del)
+			found = true;
+		else 
 		{
 			trail = curr;
-			curr = curr.getRight();
-		}
-		else if (curr.getData() < del) 
-		{
-			trail = curr;
-			curr = curr.getLeft();
+			if (curr->getData() > del)
+				curr = curr->getLeft();
+			else
+				curr = curr->getRight();
 		}
 	}
+	if (curr == nullptr)
+		throw Exception("Tried to delete non-existent node\n");
+	if (found) 
+	{
+		if (m_root == curr)
+			DeleteFromTree(m_root, del);
+		else 
+			DeleteFromTree(trail, del);
+	}
+}
+
+template<typename T>
+inline void BST<T>::DeleteFromTree(TreeNode<T> * parent, T del)
+{
+	TreeNode<T> *curr = parent;
+	int kid = 0;
+	if (parent == nullptr)
+		throw Exception("Tried to DeleteFromTree on nullptr\n");
+	if (parent->getData() == del) 
+		curr = parent;//deleting root
+	else if (parent->getRight() != nullptr && parent->getRight()->getData() == del) 
+	{
+		curr = parent->getRight();
+		kid = 1;
+	}
+	else if (parent->getLeft() != nullptr && parent->getLeft()->getData() == del) 
+	{
+		curr = parent->getLeft();
+		kid = -1;
+	}
+
+	TreeNode<T> *trail = nullptr;
+
+	if (curr->getRight() == nullptr && curr->getLeft() == nullptr)  //case 1
+	{
+		if (kid == 1)
+			parent->setRight(nullptr);
+		else if (kid == -1)
+			parent->setLeft(nullptr);
+	}
+	else if (curr->getLeft() == nullptr) //case 2
+	{
+		if (kid == 1)
+			parent->setRight(curr->getRight());
+		if (kid == -1)
+			parent->setLeft(curr->getRight());
+	}
+	else if (curr->getRight() == nullptr) //case 3 
+	{
+		if (kid == 1)
+			parent->setRight(curr->getLeft());
+		if (kid == -1)
+			parent->setLeft(curr->getLeft());
+	}
+	else //has 2 kids
+	{
+		TreeNode<T> *deleting = curr;
+		trail = nullptr;
+		curr = curr->getLeft();
+		while (curr->getRight() != nullptr) 
+		{
+			trail = curr;
+			curr = curr->getRight();
+		}
+		deleting->setData(curr->getData());
+		if (trail == nullptr) 
+		{
+			deleting->setLeft(curr->getLeft());
+		}
+		else
+			trail->setRight(curr->getLeft());
+	}
+	delete curr;
 }
 
 template<typename T>
