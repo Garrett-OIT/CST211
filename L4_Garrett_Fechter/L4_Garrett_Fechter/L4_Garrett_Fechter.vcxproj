@@ -115,8 +115,9 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="BST.h" />
+    <ClInclude Include="AVL.h" />
     <ClInclude Include="Exception.h" />
+    <ClInclude Include="LinkedList.h" />
     <ClInclude Include="Node.h" />
     <ClInclude Include="Queue_LL.h" />
     <ClInclude Include="TreeNode.h" />

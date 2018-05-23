@@ -5,7 +5,7 @@ using std::cin;
 #include <string>
 using std::string;
 #include "TreeNode.h"
-#include "BST.h"
+#include "AVL.h"
 
 #define _CRTDBG_MAP_ALLOC
 
@@ -16,7 +16,7 @@ bool t_insert();
 bool t_del();
 bool t_big();
 
-FunctionPointer test_functions[] = { t_insert, t_del, t_big };
+FunctionPointer test_functions[] = { t_insert, t_big };
 
 
 int main()
@@ -64,30 +64,30 @@ void Display_and_Sum1(const int & data)
 bool t_insert() 
 {
 	bool pass = true;
-	BST<int> ints;
-	for (int i = 0; i < 100; i += 10) 
+	AVL<int> ints;
+	for (int i = 0; i < 100; i++)
 	{
-		for (int j = i; j > i - 5; j--)
-			ints.Insert(j);
+		ints.Insert(i);
 	}
 	ints.InOrder(Display_and_Sum);
+	int height = ints.Height();
 	return pass;
 }
 
 bool t_del() 
 {
 	bool pass = true;
-	BST<int> ints;
+	AVL<int> ints;
 	for (int i = 0; i < 100; i += 10) 
 	{
 		for (int j = i; j > i - 5; j--)
 			ints.Insert(j);
 	}
-	for (int i = 50; i < 100; i += 10) 
-	{
-		for (int j = i; j > i - 5; j--)
-			ints.Delete(j);
-	}
+	//for (int i = 50; i < 100; i += 10) 
+	//{
+	//	for (int j = i; j > i - 5; j--)
+	//		ints.Delete(j);
+	//}
 	ints.InOrder(Display_and_Sum1);
 	return pass;
 }
@@ -95,14 +95,14 @@ bool t_del()
 bool t_big() 
 {
 	bool pass = true;
-	BST<int> ints;
+	AVL<int> ints;
 	for (int i = 0; i < 100; i += 10) 
 	{
 		for (int j = i; j > i - 5; j--)
 			ints.Insert(j);
 	}
-	BST<int> ints2(ints);
-	BST<int> ints3;
+	AVL<int> ints2(ints);
+	AVL<int> ints3;
 	if (ints3.Height() != 0)
 		pass = false;
 	ints3 = ints2;

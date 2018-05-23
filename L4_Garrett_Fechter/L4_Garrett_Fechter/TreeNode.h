@@ -3,7 +3,7 @@
 
 enum BF 
 {
-	LH = -1, EH, RH
+	LLH = -2, LH, EH, RH, RRH
 };
 
 template<typename T>
@@ -14,9 +14,9 @@ public:
 	TreeNode(const TreeNode & copy);
 	TreeNode(T data, BF balance = EH, TreeNode<T> * left = nullptr, TreeNode<T> * right = nullptr);
 	TreeNode & operator = (const TreeNode & rhs);
-	TreeNode<T> * getRight();
+	TreeNode<T> *& getRight();
 	void setRight(TreeNode<T> * right);
-	TreeNode<T> * getLeft();
+	TreeNode<T> *& getLeft();
 	void setLeft(TreeNode<T> * left);
 	T & getData();
 	void setData(T data);
@@ -56,7 +56,7 @@ inline TreeNode<T> & TreeNode<T>::operator=(const TreeNode & rhs)
 }
 
 template<typename T>
-inline TreeNode<T>* TreeNode<T>::getRight()
+inline TreeNode<T>*& TreeNode<T>::getRight()
 {
 	return m_right;
 }
@@ -68,7 +68,7 @@ inline void TreeNode<T>::setRight(TreeNode<T>* right)
 }
 
 template<typename T>
-inline TreeNode<T>* TreeNode<T>::getLeft()
+inline TreeNode<T>*& TreeNode<T>::getLeft()
 {
 	return m_left;
 }
