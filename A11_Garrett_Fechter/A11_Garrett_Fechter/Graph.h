@@ -2,6 +2,7 @@
 #define GRAPH_H
 
 #include <list>
+#include <queue>
 #include <iterator>
 #include "Vertex.h"
 #include "Exception.h"
@@ -19,8 +20,9 @@ public:
 		//also insert acr from to to from (undirected)
 	void DeleteArc(VData from, VData to, EData edge);
 	void DepthFirst(void(*Visit) (VData));
-	//void BreadthFirst(void(*Visit) (VData));
+	void BreadthFirst(void(*Visit) (VData));
 	bool isEmpty();
+	~Graph();
 private:
 	int m_count; //# of vertices
 	list<Vertex<EData, VData> *> m_vertices;
@@ -44,17 +46,20 @@ inline void Graph<EData, VData>::DeleteVertex(VData data)
 {
 	bool found = false;
 	auto iter = m_vertices.begin();
-	for (iter = m_vertices.begin(); !found && iter != m_vertices.end(); iter++)
+	for (iter = m_vertices.begin(); !found && iter != m_vertices.end();)
 	{
 		if ((*iter)->m_data == data)
 			found = true;
+		else
+			iter++;
 	}
 	if (found)
 	{
-		if ((*iter)->m_indegree != 0 && *iter.m_outdegree != 0)
+		if ((*iter)->m_indegree != 0 && (*iter)->m_outdegree != 0)
 			throw Exception("Can't delete a vertex with arcs still attached\n");
-		delete *iter;
+		delete (*iter);
 		m_vertices.remove(*iter);
+		m_count--;
 	}
 	else
 		throw Exception("Did not find that vertex\n");	
@@ -69,20 +74,23 @@ inline void Graph<EData, VData>::InsertArc(VData from, VData to, EData edge, int
 	auto fromIter = m_vertices.begin();
 	for (fromIter = m_vertices.begin(); !found && fromIter != m_vertices.end(); fromIter++)
 	{
-		if ((*fromIter)->m_data == from)
+		if ((*fromIter)->m_data == from) 
+		{
 			found = true;
+			fromVp = *fromIter;
+		}
 	}
-	if (found)
-		fromVp = *fromIter;
+
 	auto toIter = m_vertices.begin();
 	found = false;
 	for (toIter = m_vertices.begin(); !found && toIter != m_vertices.end(); toIter++)
 	{
-		if ((*toIter)->m_data == to)
+		if ((*toIter)->m_data == to) 
+		{
 			found = true;
+			toVp = *toIter;
+		}
 	}
-	if (found)
-		toVp = *toIter;
 	if (toVp == nullptr || fromVp == nullptr)
 		throw Exception("Couldn't find to or from vertex\n");
 	Arc<EData, VData> toArc(toVp, edge, weight);
@@ -104,49 +112,33 @@ inline void Graph<EData, VData>::DeleteArc(VData from, VData to, EData edge)
 	auto fromIter = m_vertices.begin();
 	for (fromIter = m_vertices.begin(); !found && fromIter != m_vertices.end(); fromIter++)
 	{
-		if ((*fromIter)->m_data == from)
+		if ((*fromIter)->m_data == from) 
+		{
 			found = true;
+			fromVp = *fromIter;
+		}
 	}
-	if (found)
-		fromVp = *fromIter;
 	auto toIter = m_vertices.begin();
 	found = false;
 	for (toIter = m_vertices.begin(); !found && toIter != m_vertices.end(); toIter++)
 	{
-		if ((*toIter)->m_data == to)
+		if ((*toIter)->m_data == to) 
+		{
 			found = true;
+			toVp = *toIter;
+		}
 	}
-	if (found)
-		toVp = *toIter;
 	if (toVp == nullptr || fromVp == nullptr)
 		throw Exception("Couldn't find to or from vertex\n");
 
 	//we now have from and to vertex pointers
 	//now look for specified edge
-
-	auto toVpIter = toVp->m_edges.begin();
-	found = false;
-	Arc<EData, VData> toArc;
-	for (; !found && toVpIter != toVp->m_edges.end(); toVpIter++)
-	{
-		if ((*toVpIter).m_data == edge) 
-		{
-			toArc = *toVpIter;
-			found = true;
-			toVp->m_edges.remove(toArc);
-			toVp->m_indegree--;
-			toVp->m_outdegree--;
-		}
-	}
-	if (!found)
-		throw Exception("Did not find that edge in specified vertex\n");
-
 	found = false;
 	auto fromVpIter = fromVp->m_edges.begin();
 	Arc<EData, VData> fromArc;
-	for (; !found && fromVpIter != fromVp->m_edges.end(); fromVpIter++)
+	for (; !found && fromVpIter != fromVp->m_edges.end();)
 	{
-		if ((*fromVpIter).m_data == edge) 
+		if ((*fromVpIter).m_data == edge && (*fromVpIter).m_destination == toVp)
 		{
 			fromArc = *fromVpIter;
 			found = true;
@@ -154,9 +146,32 @@ inline void Graph<EData, VData>::DeleteArc(VData from, VData to, EData edge)
 			fromVp->m_indegree--;
 			fromVp->m_outdegree--;
 		}
+		else
+			fromVpIter++;
 	}
 	if (!found)
 		throw Exception("Did not find that edge in specified vertex\n");
+
+	auto toVpIter = toVp->m_edges.begin();
+	found = false;
+	Arc<EData, VData> toArc;
+	for (; !found && toVpIter != toVp->m_edges.end();)
+	{
+		if ((*toVpIter).m_data == edge && (*toVpIter).m_destination == fromVp)
+		{
+			toArc = *toVpIter;
+			found = true;
+			toVp->m_edges.remove(toArc);
+			toVpIter = toVp->m_edges.end();
+			toVp->m_indegree--;
+			toVp->m_outdegree--;
+		}
+		else
+			toVpIter++;
+	}
+	if (!found)
+		throw Exception("Did not find that edge in specified vertex\n");
+
 }
 
 template<typename EData, typename VData>
@@ -167,19 +182,51 @@ inline void Graph<EData, VData>::DepthFirst(void(*Visit)(VData))
 		//reset processed flags
 		auto vertIter = m_vertices.begin();
 		for (; vertIter != m_vertices.end(); vertIter++)
-			(*vertIter)->processed = false;
+			(*vertIter)->m_processed = false;
 
 		list<Vertex<EData, VData> *> verts;
 		verts.push_front(m_vertices.front());
 		Vertex<EData, VData> * current = nullptr;
 		while (!verts.empty()) 
 		{
-			current = verts.pop_front();
-			Visit(current->m_data);
+			current = verts.front();
+			verts.pop_front();
+			if (current->m_processed == false)
+				Visit(current->m_data);
+			current->m_processed = true;
 			for (auto eIter = current->m_edges.begin(); eIter != current->m_edges.end(); eIter++)
 			{
-				if ((*eIter)->m_processed == false)
-					verts.push_front(*eIter);
+				if ((*eIter).m_destination->m_processed == false)
+					verts.push_front((*eIter).m_destination);
+			}
+		}
+	}
+}
+
+template<typename EData, typename VData>
+inline void Graph<EData, VData>::BreadthFirst(void(*Visit)(VData))
+{
+	if (!m_vertices.empty()) 
+	{
+		//reset processed flags
+		auto vertIter = m_vertices.begin();
+		for (; vertIter != m_vertices.end(); vertIter++)
+			(*vertIter)->m_processed = false;
+
+		list<Vertex<EData, VData> *> verts;
+		verts.push_back(m_vertices.front());
+		Vertex<EData, VData> * current = nullptr;
+		while (!verts.empty()) 
+		{
+			current = verts.front();
+			verts.pop_front();
+			if (current->m_processed == false)
+				Visit(current->m_data);
+			current->m_processed = true;
+			for (auto eIter = current->m_edges.begin(); eIter != current->m_edges.end(); eIter++)
+			{
+				if ((*eIter).m_destination->m_processed == false)
+					verts.push_back((*eIter).m_destination);
 			}
 		}
 	}
@@ -189,4 +236,15 @@ template<typename EData, typename VData>
 inline bool Graph<EData, VData>::isEmpty()
 {
 	return m_vertices.empty();
+}
+
+template<typename EData, typename VData>
+inline Graph<EData, VData>::~Graph()
+{
+	while (!m_vertices.empty()) 
+	{
+		delete m_vertices.front();
+		m_vertices.pop_front();
+	}
+	m_count = 0;
 }

@@ -1,3 +1,8 @@
+//Author: Garrett Fechter
+//Date Created: 5/22/2018
+//Date Modified: 
+//Purpose: AVL Tree definition
+
 #ifndef AVL_H
 #define AVL_H
 
@@ -9,6 +14,62 @@
 using std::min;
 using std::max;
 
+/*
+ Class: AVL
+ Purpose: AVL ADT
+ Functions:
+	AVL();
+		default ctor. empty (nullptr)
+	AVL(const AVL & copy);//copy side to side top to bottom
+		copy ctor
+	AVL & operator = (const AVL & rhs); //copy side to side top to bottom
+		overload operator =
+	~AVL();
+		destructor
+	void Insert(T ins);
+		insert a node with data ins
+	void Delete(T del);
+		delete a node 
+	void Purge(); //destroy side to side bottom to top
+		purge all of the nodes in the tree
+	int Height();
+		calculate the height of the avl tree (calls Height(m_root))
+	void InOrder(void(*visit) (const T & data));
+		an inorder traversal
+	void Preorder(void(*visit) (const T & data));
+		a preorder traversal
+	void Postorder(void(*visit) (const T & data));
+		a postorder traversal
+	void BreadthFirst(void(*visit) (const T & data));
+		a breadth first traversal
+private:
+	void RightBalance(TreeNode<T>*& root, bool & taller);
+		balance for insert, on thr right
+	void LeftBalance(TreeNode<T>*& root, bool & taller);
+		balance for insert on the left
+	TreeNode<T> *& RR(TreeNode<T> *& root);
+		rotates to the left
+	TreeNode<T> *& LL(TreeNode<T> *& root);
+		rotates tot the right
+	void Insert(TreeNode<T> *& root, T data, bool & taller);
+		insert a node with data data at root
+	void Purge(TreeNode<T> *root);
+		destroy all nodes below root
+	TreeNode<T> * Copy(TreeNode<T>* root);
+		copy an avl tree matching root
+	int getBalance(TreeNode<T> * root);
+		get the left height minus right (used in delete)
+	int Height(TreeNode<T> * node);
+		get the height of a node
+	TreeNode<T> * Delete(TreeNode<T> *& parent, T del);
+		delete a node
+	void InOrder(void(*visit) (const T & data), TreeNode<T> *root);
+		inorder traversal stareting from root
+	void Preorder(void(*visit) (const T & data), TreeNode<T> *root);
+		preorder traversal stareting from root
+	void Postorder(void(*visit) (const T & data), TreeNode<T> *root);
+		posterder traversal stareting from root
+*/
 template <typename T>
 class AVL
 {
@@ -28,29 +89,49 @@ public:
 private:
 	void RightBalance(TreeNode<T>*& root, bool & taller);
 	void LeftBalance(TreeNode<T>*& root, bool & taller);
-	void RR(TreeNode<T> *& root);
-	void LL(TreeNode<T> *& root);
+	TreeNode<T> *& RR(TreeNode<T> *& root);
+	TreeNode<T> *& LL(TreeNode<T> *& root);
 	void Insert(TreeNode<T> *& root, T data, bool & taller);
 	void Purge(TreeNode<T> *root);
 	TreeNode<T> * Copy(TreeNode<T>* root);
+	int getBalance(TreeNode<T> * root);
 	int Height(TreeNode<T> * node);
-	void DeleteFromTree(TreeNode<T> * parent, T del);
+	TreeNode<T> * Delete(TreeNode<T> *& parent, T del);
 	void InOrder(void(*visit) (const T & data), TreeNode<T> *root);
 	void Preorder(void(*visit) (const T & data), TreeNode<T> *root);
 	void Postorder(void(*visit) (const T & data), TreeNode<T> *root);
-	TreeNode<T> *m_root;
+
+	TreeNode<T> *m_root;//the root of the tree
 };
 
+/*
+ Function: AVL()
+ Purpose: default ctor
+ Entry: -
+ Exit: m_root is nullptr
+*/
 template<typename T>
 inline AVL<T>::AVL() : m_root(nullptr)
 { }
 
+/*
+ Function: AAVL(const AVL & copy)
+ Purpose: copy ctor
+ Entry: -
+ Exit: creates new avl matching copy
+*/
 template<typename T>
 inline AVL<T>::AVL(const AVL & copy) : m_root(nullptr)
 {
 	m_root = Copy(copy.m_root);
 }
 
+/*
+ Function: operator -
+ Purpose: overloaded assignment operator
+ Entry: -
+ Exit: -
+*/
 template<typename T>
 inline AVL<T> & AVL<T>::operator=(const AVL & rhs)
 {
@@ -62,6 +143,12 @@ inline AVL<T> & AVL<T>::operator=(const AVL & rhs)
 	return *this;
 }
 
+/*
+ Function: ~AVL
+ Purpose: dtor
+ Entry: -
+ Exit: all nodes are deleted, m_root becomes nullptr
+*/
 template<typename T>
 inline AVL<T>::~AVL()
 {
@@ -69,6 +156,12 @@ inline AVL<T>::~AVL()
 	m_root = nullptr;
 }
 
+/*
+ Function: Insert
+ Purpose: insert a node into the avl tree
+ Entry: -
+ Exit: puts a node in the tree, according to BST rules and then balancing
+*/
 template<typename T>
 inline void AVL<T>::Insert(T ins)
 {
@@ -76,38 +169,116 @@ inline void AVL<T>::Insert(T ins)
 	Insert(m_root, ins, taller);
 }
 
+/*
+ Function: Delete
+ Purpose: delete a node matching data del. Throws exception if data isn't found
+ Entry: -
+ Exit: removes a node from the tree, rebalancing as necessary
+*/
 template<typename T>
 inline void AVL<T>::Delete(T del)
 {
 	if (m_root == nullptr)
 		throw Exception("Can't delete from empty tree\n");
-	TreeNode<T> *curr = m_root;
-	TreeNode<T> *trail = m_root;
-	bool found = false;
-	while (curr != nullptr && !found)
-	{
-		if (curr->getData() == del)
-			found = true;
-		else
-		{
-			trail = curr;
-			if (curr->getData() > del)
-				curr = curr->getLeft();
-			else
-				curr = curr->getRight();
-		}
-	}
-	if (curr == nullptr)
-		throw Exception("Tried to delete non-existent node\n");
-	if (found)
-	{
-		if (m_root == curr)
-			DeleteFromTree(m_root, del);
-		else
-			DeleteFromTree(trail, del);
-	}
+	Delete(m_root, del);
 }
 
+/*
+ Function: getBalance
+ Purpose: get the balance of a node
+ Entry: -
+ Exit: -
+*/
+template<typename T>
+inline int AVL<T>::getBalance(TreeNode<T> * root) 
+{
+	int bal = 0;
+	if (root != nullptr) 
+	{
+		bal = Height(root->getLeft()) - Height(root->getRight());
+	}
+	return bal;
+}
+
+/*
+ Function: Delete
+ Purpose: delete a node matching data del. Throws exception if data isn't found
+ Entry: -
+ Exit: removes a node from the tree, rebalancing as necessary
+*/
+template<typename T>
+inline TreeNode<T> * AVL<T>::Delete(TreeNode<T>*& root, T del)
+{
+	TreeNode<T> * ret = nullptr;
+	if (root != nullptr)
+	{
+		if (del < root->getData())
+			root->setLeft(Delete(root->getLeft(), del));
+		else if (del > root->getData())
+			root->setRight(Delete(root->getRight(), del));
+		else
+		{
+			if ((root->getRight() == nullptr) || (root->getLeft() == nullptr))
+			{
+				TreeNode<T> *temp = (root->getLeft() != nullptr) ? root->getLeft() : root->getRight();
+				if (temp == nullptr)
+				{
+					temp = root;
+					root = nullptr;
+				}
+				else
+					*root = *temp;
+				delete temp;
+			}
+			else
+			{
+				TreeNode<T> * temp = root->getRight();
+				while (temp->getLeft() != nullptr)
+					temp = temp->getLeft();
+				root->setData(temp->getData());
+				root->getRight() = Delete(root->getRight(), temp->getData());
+			}
+		}
+
+		if (root == nullptr)
+			ret = nullptr;
+		else
+		{
+			ret = root;
+			BF bfs[] = { LLH, LH, EH, RH, RRH };
+			int balance = getBalance(root);
+			if (balance > 2 || balance < -2)
+				throw Exception("Incorrect Balancing detected\n");
+			root->setBal(bfs[(-balance) + 2]);
+			if (balance > 1 && getBalance(root->getLeft()) >= 0) 
+			{
+				ret = LL(root);
+			}
+			else if (balance > 1 && getBalance(root->getLeft()) < 0)
+			{
+				root->setLeft(RR(root->getLeft()));
+				ret = LL(root);
+			}
+			else if (balance < -1 && getBalance(root->getRight()) <= 0) 
+			{
+				ret = RR(root);
+			}
+			else if (balance < -1 && getBalance(root->getRight()) > 0)
+			{
+				root->setRight(LL(root->getRight()));
+				ret = RR(root);
+			}
+		}
+	}
+	return ret;
+}
+
+/*
+ Function: Purge
+ Purpose: remove all data from tree
+ Entry: -
+ Exit: all nodes are deleted
+*/
 template<typename T>
 inline void AVL<T>::Purge()
 {
@@ -116,6 +287,13 @@ inline void AVL<T>::Purge()
 	m_root = nullptr;
 }
 
+/*
+ Function: Copy
+ Purpose: copy this tree to match passed root * of tree
+ Entry: takes existing root* to tree
+ Exit: creates new tree recursively matching passed. m_root shouldnt have memory
+	or a call to this will result in memory leaks
+*/
 template<typename T>
 inline TreeNode<T> * AVL<T>::Copy(TreeNode<T>* root)
 {
@@ -129,9 +307,14 @@ inline TreeNode<T> * AVL<T>::Copy(TreeNode<T>* root)
 	return newTree;
 }
 
+/*
+ Function: Height
+ Purpose: Calculate Height of node (recursively)
+ Entry: -
+ Exit: -
+*/
 template<typename T>
-inline int AVL<T>::Height(TreeNode<T>* node)
-{
+inline int AVL<T>::Height(TreeNode<T>* node) {
 	int ret = 0;
 	if (node != nullptr)
 	{
@@ -145,76 +328,24 @@ inline int AVL<T>::Height(TreeNode<T>* node)
 	return ret;
 }
 
-template<typename T>
-inline void AVL<T>::DeleteFromTree(TreeNode<T> * parent, T del)
-{
-	TreeNode<T> *curr = parent;
-	int kid = 0;
-	if (parent == nullptr)
-		throw Exception("Tried to DeleteFromTree on nullptr\n");
-	if (parent->getData() == del)
-		curr = parent;//deleting root
-	else if (parent->getRight() != nullptr && parent->getRight()->getData() == del)
-	{
-		curr = parent->getRight();
-		kid = 1;
-	}
-	else if (parent->getLeft() != nullptr && parent->getLeft()->getData() == del)
-	{
-		curr = parent->getLeft();
-		kid = -1;
-	}
-
-	TreeNode<T> *trail = nullptr;
-
-	if (curr->getRight() == nullptr && curr->getLeft() == nullptr)  //case 1
-	{
-		if (kid == 1)
-			parent->setRight(nullptr);
-		else if (kid == -1)
-			parent->setLeft(nullptr);
-	}
-	else if (curr->getLeft() == nullptr) //case 2
-	{
-		if (kid == 1)
-			parent->setRight(curr->getRight());
-		if (kid == -1)
-			parent->setLeft(curr->getRight());
-	}
-	else if (curr->getRight() == nullptr) //case 3 
-	{
-		if (kid == 1)
-			parent->setRight(curr->getLeft());
-		if (kid == -1)
-			parent->setLeft(curr->getLeft());
-	}
-	else //has 2 kids
-	{
-		TreeNode<T> *deleting = curr;
-		trail = nullptr;
-		curr = curr->getLeft();
-		while (curr->getRight() != nullptr)
-		{
-			trail = curr;
-			curr = curr->getRight();
-		}
-		deleting->setData(curr->getData());
-		if (trail == nullptr)
-		{
-			deleting->setLeft(curr->getLeft());
-		}
-		else
-			trail->setRight(curr->getLeft());
-	}
-	delete curr;
-}
-
+/*
+ Function: Height
+ Purpose: get height of this tree, by calling Hieght(m_root)
+ Entry: -
+ Exit: -
+*/
 template<typename T>
 inline int AVL<T>::Height()
 {
 	return Height(m_root);
 }
 
+/*
+ Function: InOrder
+ Purpose: an inorder travseral
+ Entry: -
+ Exit: -
+*/
 template<typename T>
 inline void AVL<T>::InOrder(void(*visit)(const T & data))
 {
@@ -222,6 +353,12 @@ inline void AVL<T>::InOrder(void(*visit)(const T & data))
 		InOrder(visit, m_root);
 }
 
+/*
+ Function: Preorder
+ Purpose: an inorder travseral
+ Entry: -
+ Exit: -
+*/
 template<typename T>
 inline void AVL<T>::Preorder(void(*visit)(const T &data))
 {
@@ -229,6 +366,12 @@ inline void AVL<T>::Preorder(void(*visit)(const T &data))
 		Preorder(visit, m_root);
 }
 
+/*
+ Function: Postorder
+ Purpose: a postorder traversal
+ Entry:
+ Exit:
+*/
 template<typename T>
 inline void AVL<T>::Postorder(void(*visit)(const T &data))
 {
@@ -236,6 +379,12 @@ inline void AVL<T>::Postorder(void(*visit)(const T &data))
 		Postorder(visit, m_root);
 }
 
+/*
+ Function: BreadthFirst
+ Purpose: a breadthfirst traversal
+ Entry: -
+ Exit: -
+*/
 template<typename T>
 inline void AVL<T>::BreadthFirst(void(*visit)(const T &data))
 {
@@ -256,6 +405,12 @@ inline void AVL<T>::BreadthFirst(void(*visit)(const T &data))
 }
 
 
+/*
+ Function: Insert
+ Purpose: Insert a node into the tree according to BST rules then rebalance
+ Entry: -
+ Exit: puts a new node into tree & rebalances if necessary
+*/
 template<typename T>
 inline void AVL<T>::Insert(TreeNode<T> * &root, T data, bool & taller)
 {
@@ -314,6 +469,12 @@ inline void AVL<T>::Insert(TreeNode<T> * &root, T data, bool & taller)
 	}
 }
 
+/*
+ Function: RightBalance
+ Purpose: Balance the right side of a tree
+ Entry: -
+ Exit: rebalances the right side of a tree to restore avl rules
+*/
 template<typename T>
 inline void AVL<T>::RightBalance(TreeNode<T>*& root, bool & taller)
 {
@@ -331,6 +492,12 @@ inline void AVL<T>::RightBalance(TreeNode<T>*& root, bool & taller)
 	taller = false;
 }
 
+/*
+ Function: LeftBalance
+ Purpose: Balance the left side of a tree
+ Entry: -
+ Exit: rebalances the left side of a tree to restore avl rules
+*/
 template<typename T>
 inline void AVL<T>::LeftBalance(TreeNode<T>*& root, bool & taller)
 {
@@ -350,8 +517,14 @@ inline void AVL<T>::LeftBalance(TreeNode<T>*& root, bool & taller)
 	taller = false;
 }
 
+/*
+ Function: RR
+ Purpose: perform a RR rotation (rotating nodes to the left)
+ Entry: -
+ Exit: moves nodes around
+*/
 template<typename T>
-inline void AVL<T>::RR(TreeNode<T>*& root)
+inline TreeNode<T> *& AVL<T>::RR(TreeNode<T>*& root)
 {
 	TreeNode<T> * child = root->getRight();
 	TreeNode<T> * T1 = root->getLeft();
@@ -368,10 +541,17 @@ inline void AVL<T>::RR(TreeNode<T>*& root)
 	BF bfs[] = { LLH, LH, EH, RH, RRH };
 	child->setBal(bfs[(static_cast<int>(root->getBal()) - 1 - max(static_cast<int>(oldChild), 0)) + 2]);
 	root->setBal(bfs[(static_cast<int>(oldChild) - 1 + min(static_cast<int>(child->getBal()), 0)) + 2]);
+	return root;
 }
 
+/*
+ Function: LL
+ Purpose: perform a LL rotation (rotating nodes to the right)
+ Entry: -
+ Exit: moves nodes around
+*/
 template<typename T>
-inline void AVL<T>::LL(TreeNode<T>*& root)
+inline TreeNode<T> *& AVL<T>::LL(TreeNode<T>*& root)
 {
 	TreeNode<T> * child = root->getLeft();
 	TreeNode<T> * T1 = child->getLeft();
@@ -388,8 +568,15 @@ inline void AVL<T>::LL(TreeNode<T>*& root)
 	BF bfs[] = { LLH, LH, EH, RH, RRH };
 	child->setBal(bfs[(static_cast<int>(root->getBal()) + 1 - min(static_cast<int>(oldChild), 0)) + 2]);
 	root->setBal(bfs[(static_cast<int>(oldChild) + 1 + max(static_cast<int>(child->getBal()), 0)) + 2]);
+	return root;
 }
 
+/*
+ Function: Purge
+ Purpose: Get rid of all data in tree (recuesvily)
+ Entry: non-empty root
+ Exit: removes all data, sets root to nullptr
+*/
 template<typename T>
 inline void AVL<T>::Purge(TreeNode<T>* root)
 {
@@ -407,6 +594,12 @@ inline void AVL<T>::Purge(TreeNode<T>* root)
 	delete root;
 }
 
+/*
+ Function: InOrder
+ Purpose: inorder traversal
+ Entry: -
+ Exit: -
+*/
 template<typename T>
 inline void AVL<T>::InOrder(void(*visit)(const T &data), TreeNode<T>* root)
 {
@@ -420,6 +613,12 @@ inline void AVL<T>::InOrder(void(*visit)(const T &data), TreeNode<T>* root)
 		InOrder(visit, root->getRight());
 }
 
+/*
+ Function: PreOrder
+ Purpose: a preorder traversal
+ Entry: -
+ Exit: -
+*/
 template<typename T>
 inline void AVL<T>::Preorder(void(*visit)(const T &data), TreeNode<T>* root)
 {
@@ -433,6 +632,12 @@ inline void AVL<T>::Preorder(void(*visit)(const T &data), TreeNode<T>* root)
 		Preorder(visit, root->getRight());
 }
 
+/*
+ Function: Postorder
+ Purpose: a postorder traversal
+ Entry: -
+ Exit: -
+*/
 template<typename T>
 inline void AVL<T>::Postorder(void(*visit)(const T &data), TreeNode<T>* root)
 {

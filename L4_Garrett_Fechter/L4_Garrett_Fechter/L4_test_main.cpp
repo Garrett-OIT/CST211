@@ -1,4 +1,7 @@
 //Author: Garrett Fechter
+//Date Created: 5/22/2018
+//Date Modified: 
+//Purpose: test file for AVL trees
 #include <iostream>
 using std::cout;
 using std::cin;
@@ -12,11 +15,13 @@ using std::string;
 typedef bool(*FunctionPointer)();  // Define a function pointer type
 								   // Test function declaration
 
+//This test suite isnt very thorough, and i checked most things by hand
+//some more test-only private functions could verify the integrity of the avl tree better
 bool t_insert();
 bool t_del();
 bool t_big();
 
-FunctionPointer test_functions[] = { t_insert, t_big };
+FunctionPointer test_functions[] = { t_insert, t_big, t_del };
 
 
 int main()
@@ -78,17 +83,29 @@ bool t_del()
 {
 	bool pass = true;
 	AVL<int> ints;
-	for (int i = 0; i < 100; i += 10) 
+	for (int i = 0; i < 20; i++)
 	{
-		for (int j = i; j > i - 5; j--)
-			ints.Insert(j);
+		ints.Insert(i);
 	}
-	//for (int i = 50; i < 100; i += 10) 
-	//{
-	//	for (int j = i; j > i - 5; j--)
-	//		ints.Delete(j);
-	//}
+	for (int i = 10; i < 20; i++) 
+	{
+		ints.Delete(i);
+	}
+	ints.Delete(4);
+	ints.Delete(2);
+	ints.Delete(0);
+	ints.Delete(1);
 	ints.InOrder(Display_and_Sum1);
+	ints.Purge();
+	ints.Insert(0);
+	ints.Insert(1);
+	ints.Insert(2);
+	ints.Insert(3);
+	ints.Insert(4);
+	ints.Insert(5);
+	ints.Delete(0);
+	ints.Delete(4);
+	ints.Delete(5);
 	return pass;
 }
 
