@@ -1,0 +1,17 @@
+﻿  main.cpp
+z:\cst211\cst211\l5_garrett_fechter\l5_garrett_fechter\main.cpp(50): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+z:\cst211\cst211\l5_garrett_fechter\l5_garrett_fechter\graph.h(308): warning C4018: '<': signed/unsigned mismatch
+  z:\cst211\cst211\l5_garrett_fechter\l5_garrett_fechter\graph.h(306): note: while compiling class template member function 'Arc<EData,VData> Graph<EData,VData>::Iter::GetCurrent(void)'
+          with
+          [
+              EData=std::string,
+              VData=std::string
+          ]
+  z:\cst211\cst211\l5_garrett_fechter\l5_garrett_fechter\main.cpp(67): note: see reference to function template instantiation 'Arc<EData,VData> Graph<EData,VData>::Iter::GetCurrent(void)' being compiled
+          with
+          [
+              EData=std::string,
+              VData=std::string
+          ]
+  z:\cst211\cst211\l5_garrett_fechter\l5_garrett_fechter\main.cpp(64): note: see reference to class template instantiation 'Graph<std::string,std::string>::Iter' being compiled
+  L5_Garrett_Fechter.vcxproj -> Z:\CST211\CST211\L5_Garrett_Fechter\Debug\L5_Garrett_Fechter.exe
