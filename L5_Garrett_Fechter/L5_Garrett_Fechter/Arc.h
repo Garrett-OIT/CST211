@@ -1,13 +1,24 @@
+/*
+ Author: Garrett Fechter
+ Date Created: 6/2/2018
+ Date Modified:
+*/
 #ifndef ARC_H
 #define ARC_H
-
 template<typename EData, typename VData>
 class Vertex;
 
+template<typename EData, typename VData>
+class Graph;
+
+#include <string>
+using std::string;
+
 template <typename EData, typename VData>
-class Arc 
+class Arc
 {
 public:
+	friend void roadDijkstra(Graph<string, string> &roads, string from, string to);
 	Arc();
 	Arc(Vertex<EData, VData> * vert, EData data, float weight);
 	Arc(const Arc & copy);
@@ -55,5 +66,4 @@ inline Arc<EData, VData>::~Arc()
 	m_destination = nullptr;
 	m_weight = 0;
 }
-
 #endif

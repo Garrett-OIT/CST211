@@ -1,7 +1,15 @@
+/*
+ Author: Garrett Fechter
+ Date Created: 6/2/2018
+ Date Modified:
+*/
 #ifndef VERTEX_H
 #define VERTEX_H
+
 #include <list>
 #include "Arc.h"
+#include <string>
+using std::string;
 
 using std::list;
 
@@ -24,22 +32,21 @@ private:
 	int m_outdegree;
 	VData m_data;
 	list<Arc<EData, VData>> m_edges;
+	friend void roadDijkstra(Graph<string, string> &roads, string from, string to);
 };
-
-#endif
 
 template<typename EData, typename VData>
 inline Vertex<EData, VData>::Vertex() : m_processed(false), m_indegree(0), m_outdegree(0), m_data(), m_edges()
 { }
 
 template<typename EData, typename VData>
-inline Vertex<EData, VData>::Vertex(const Vertex & copy) : m_processed(copy.m_processed), 
-	m_indegree(copy.m_indegree), m_outdegree(copy.m_outdegree), m_data(copy.m_data), m_edges(copy.m_edges)
+inline Vertex<EData, VData>::Vertex(const Vertex & copy) : m_processed(copy.m_processed),
+m_indegree(copy.m_indegree), m_outdegree(copy.m_outdegree), m_data(copy.m_data), m_edges(copy.m_edges)
 { }
 
 template<typename EData, typename VData>
-inline Vertex<EData, VData>::Vertex(VData data) : m_processed(false), 
-	m_indegree(0), m_outdegree(0), m_data(data), m_edges()
+inline Vertex<EData, VData>::Vertex(VData data) : m_processed(false),
+m_indegree(0), m_outdegree(0), m_data(data), m_edges()
 { }
 
 template<typename EData, typename VData>
@@ -61,3 +68,4 @@ inline Vertex<EData, VData>::~Vertex()
 	m_outdegree = 0;
 	m_edges.clear();
 }
+#endif

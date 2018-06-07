@@ -1,3 +1,8 @@
+/*
+ Author: Garrett Fechter
+ Date Created: 6/2/2018
+ Date Modified: 6/5/2018 - added arc iterator
+*/
 #ifndef GRAPH_H
 #define GRAPH_H
 
@@ -6,13 +11,41 @@
 #include <iterator>
 #include "Vertex.h"
 #include "Exception.h"
+#include <string>
+using std::string;
 
 using std::list;
 
+/*
+class Graph
+ functions:
+	Graph();
+		ctor. empty graph
+	~Graph();
+		dtor, makes graph empty
+	void InsertVertex(VData data); 
+		insert a vertex with data
+	void DeleteVertex(VData data); 
+		delete vertex that matches data
+	void InsertArc(VData from, VData to, EData edge, float weight);
+		insert arc into from, destination pointer to to
+		also insert arc from to to from (undirected)
+	void DeleteArc(VData from, VData to, EData edge);
+		removes an arc
+	void DepthFirst(void(*Visit) (VData));
+		performs a depth first iteration over the graph
+	void BreadthFirst(void(*Visit) (VData));
+		performs a breadth first iteration over the graph
+	bool isEmpty();
+		whether or not the graph is empty
+	int operator[] (VData find);
+		returns index (using depth first approach) of an element, -1 if not found
+*/
 template <typename EData, typename VData>
 class Graph
 {
 public:
+	friend void roadDijkstra(Graph<string, string> &roads, string from, string to);
 	Graph();
 	void InsertVertex(VData data); //insert a vertex with data
 	void DeleteVertex(VData data); //delete vertex that matches data
@@ -24,9 +57,27 @@ public:
 	bool isEmpty();
 	int operator[] (VData find);
 	~Graph();
+	/*
+		Class: Iter - an iterator for a vertex's edges
+			friend void roadDijkstra(Graph<string, string> &roads, string from, string to);
+				roadDijkstra can access members
+			Arc<EData, VData> GetCurrent();
+				Gets the current arc
+			Iter(const Graph<EData, VData> &graph, VData data);
+				ctor that specifies the graph and node you're interested in
+			void MoveNext();
+				moves to next arc
+			~Iter();
+				dtor
+			void Reset(VData data);
+				resets the iterator to the beggining of data's arc
+			bool isDone();
+				whether or not the iterator has reached all arcs
+	*/
 	class Iter
 	{
 	public:
+		friend void roadDijkstra(Graph<string, string> &roads, string from, string to);
 		Arc<EData, VData> GetCurrent();
 		Iter(const Graph<EData, VData> &graph, VData data);
 		void MoveNext();
@@ -34,15 +85,14 @@ public:
 		void Reset(VData data);
 		bool isDone();
 	protected:
-		int m_index;
-		const Graph<EData, VData> * m_graph;
-		const Vertex<EData, VData> * m_vertex;
+		int m_index;//the index of walking through a vertex's arcs
+		const Graph<EData, VData> * m_graph;//the graph that the iterator works on
+		Vertex<EData, VData> * m_vertex;//the vertex inside graph currently being iterated over
 	};
 private:
 	int m_count; //# of vertices
-	list<Vertex<EData, VData> *> m_vertices;
+	list<Vertex<EData, VData> *> m_vertices;//list of vertices
 };
-#endif
 
 template<typename EData, typename VData>
 inline Graph<EData, VData>::Graph() : m_count(0), m_vertices()
@@ -192,12 +242,16 @@ inline void Graph<EData, VData>::DeleteArc(VData from, VData to, EData edge)
 template<typename EData, typename VData>
 inline void Graph<EData, VData>::DepthFirst(void(*Visit)(VData))
 {
+	std::queue<bool> procs;
 	if (!m_vertices.empty())
 	{
 		//reset processed flags
 		auto vertIter = m_vertices.begin();
 		for (; vertIter != m_vertices.end(); vertIter++)
+		{
+			procs.push((*vertIter)->m_processed);
 			(*vertIter)->m_processed = false;
+		}
 
 		list<Vertex<EData, VData> *> verts;
 		verts.push_front(m_vertices.front());
@@ -216,33 +270,48 @@ inline void Graph<EData, VData>::DepthFirst(void(*Visit)(VData))
 			}
 		}
 	}
+	auto vertIter = m_vertices.begin();
+	for (; vertIter != m_vertices.end(); vertIter++) 
+	{
+		(*vertIter)->m_processed = procs.front();
+		procs.pop();
+	}
 }
 
 template<typename EData, typename VData>
 inline int Graph<EData, VData>::operator[](VData find)
 {
-	int found = -1;
+	std::queue<bool> procs;
+	int index = 0;
+	int location = -1;
+	bool found = false;
 	if (!m_vertices.empty())
 	{
 		//reset processed flags
 		auto vertIter = m_vertices.begin();
 		for (; vertIter != m_vertices.end(); vertIter++)
+		{
+			procs.push((*vertIter)->m_processed);
 			(*vertIter)->m_processed = false;
+		}
 
 		list<Vertex<EData, VData> *> verts;
 		verts.push_front(m_vertices.front());
 		Vertex<EData, VData> * current = nullptr;
-		int index = 0;
-		while (!verts.empty() && found == -1)
+		while (!verts.empty())
 		{
 			current = verts.front();
 			verts.pop_front();
-			if (current->m_processed == false)
+			if (current->m_processed == false) 
 			{
-				if (find == current->m_data)
-					found = index;
+				if (current->m_data == find) 
+				{
+					found = true;
+					location = index;
+				}
+				if (!found)
+					index++;
 			}
-			index++;
 			current->m_processed = true;
 			for (auto eIter = current->m_edges.begin(); eIter != current->m_edges.end(); eIter++)
 			{
@@ -251,7 +320,13 @@ inline int Graph<EData, VData>::operator[](VData find)
 			}
 		}
 	}
-	return found;
+	auto vertIter = m_vertices.begin();
+	for (; vertIter != m_vertices.end(); vertIter++) 
+	{
+		(*vertIter)->m_processed = procs.front();
+		procs.pop();
+	}
+	return location;
 }
 
 template<typename EData, typename VData>
@@ -317,6 +392,7 @@ inline Arc<EData, VData> Graph<EData, VData>::Iter::GetCurrent()
 template<typename EData, typename VData>
 inline Graph<EData, VData>::Iter::Iter(const Graph<EData, VData>& graph, VData data) : m_index(0), m_graph(&graph), m_vertex(nullptr)
 {
+	std::queue<bool> procs;
 	if (m_graph != nullptr)
 	{
 		int found = -1;
@@ -325,8 +401,10 @@ inline Graph<EData, VData>::Iter::Iter(const Graph<EData, VData>& graph, VData d
 			//reset processed flags
 			auto vertIter = m_graph->m_vertices.begin();
 			for (; vertIter != m_graph->m_vertices.end(); vertIter++)
+			{
+				procs.push((*vertIter)->m_processed);
 				(*vertIter)->m_processed = false;
-
+			}
 			list<Vertex<EData, VData> *> verts;
 			verts.push_front(m_graph->m_vertices.front());
 			Vertex<EData, VData> * current = nullptr;
@@ -352,6 +430,12 @@ inline Graph<EData, VData>::Iter::Iter(const Graph<EData, VData>& graph, VData d
 				}
 			}
 		}
+	}
+	auto vertIter = m_graph->m_vertices.begin();
+	for (; vertIter != m_graph->m_vertices.end(); vertIter++) 
+	{
+		(*vertIter)->m_processed = procs.front();
+		procs.pop();
 	}
 }
 
@@ -372,6 +456,7 @@ inline Graph<EData, VData>::Iter::~Iter()
 template<typename EData, typename VData>
 inline void Graph<EData, VData>::Iter::Reset(VData data)
 {
+	std::queue<bool> procs;
 	if (m_graph != nullptr)
 	{
 		int found = -1;
@@ -380,7 +465,10 @@ inline void Graph<EData, VData>::Iter::Reset(VData data)
 			//reset processed flags
 			auto vertIter = m_graph->m_vertices.begin();
 			for (; vertIter != m_graph->m_vertices.end(); vertIter++)
+			{
+				procs.push((*vertIter)->m_processed);
 				(*vertIter)->m_processed = false;
+			}
 
 			list<Vertex<EData, VData> *> verts;
 			verts.push_front(m_graph->m_vertices.front());
@@ -408,8 +496,13 @@ inline void Graph<EData, VData>::Iter::Reset(VData data)
 			}
 		}
 	}
+	auto vertIter = m_vertices.begin();
+	for (; vertIter != m_vertices.end(); vertIter++) 
+	{
+		(*vertIter)->m_processed = procs.front();
+		procs.pop();
+	}
 }
-
 
 template<typename EData, typename VData>
 inline bool Graph<EData, VData>::Iter::isDone()
@@ -420,5 +513,9 @@ inline bool Graph<EData, VData>::Iter::isDone()
 		if (m_index >= m_vertex->m_outdegree)
 			done = true;
 	}
+	else
+		throw Exception("iterator is null\n");
 	return done;
 }
+
+#endif
